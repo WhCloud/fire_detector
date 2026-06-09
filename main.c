@@ -46,7 +46,6 @@ volatile uint8_t t2_received = 0;
 volatile uint8_t response_phase = 0;
 volatile uint16_t prev_ticks = 0;
 volatile uint8_t first_measure = 1;
-volatile uint8_t zero_cnt = 0;
 
 uint8_t eeprom_read(uint8_t addr) {
     EEADRL = addr;
@@ -71,11 +70,27 @@ void eeprom_write(uint8_t addr, uint8_t data) {
 void protocol_on_bus_change(void) {
     uint16_t cur = TMR1;
     uint16_t delta;
-    if (first_measure) {
+
+    // --- Frame sync via inter-frame idle gap ---
+    // Panel polls are spaced >=20 ms (spec) > TMR1 overflow period (16.384 ms).
+    // TMR1 overflow IRQ is disabled, so a long idle just latches PIR1bits.TMR1IF.
+    // Set here => a gap elapsed => THIS edge is the first edge of a new frame.
+    if (PIR1bits.TMR1IF) {
+        PIR1bits.TMR1IF = 0;
+        prev_ticks = cur;
+        first_measure = 0;
+        bit_count = 0;
+        rx_buffer = 0;
+        if (rx_state != WAIT_T2) rx_state = RECEIVING_BITS; // don't disturb an in-progress response
+        return;                 // seed only: this delta spans the idle gap, not a bit
+    }
+
+    if (first_measure) {        // very first edge after boot, no gap measured yet
         first_measure = 0;
         prev_ticks = cur;
         return;
     }
+
     if (cur >= prev_ticks)
         delta = cur - prev_ticks;
     else
@@ -95,30 +110,14 @@ void protocol_on_bus_change(void) {
 
     uint8_t bit = (us < BIT_THRESHOLD_US) ? 0 : 1;
 
-    if (rx_state == IDLE) {
-        if (bit == 0) {
-            zero_cnt++;
-            if (zero_cnt == 4) {
-                rx_state = RECEIVING_BITS;
-                rx_buffer = 0;
-                rx_buffer |= (uint32_t)0 << 0;
-                rx_buffer |= (uint32_t)0 << 1;
-                rx_buffer |= (uint32_t)0 << 2;
-                rx_buffer |= (uint32_t)0 << 3;
-                bit_count = 4;
-                zero_cnt = 0;
-                G_LED_SetHigh(); __delay_us(200); G_LED_SetLow();
-            }
-        } else {
-            zero_cnt = 0;
-        }
-    } else if (rx_state == RECEIVING_BITS) {
+    // Capture 12 data bits: [mode:4 LSB-first][addr:8 LSB-first]; 3 trailing sync bits ignored.
+    if (rx_state == RECEIVING_BITS && bit_count < 12) {
         rx_buffer |= (uint32_t)bit << bit_count;
         bit_count++;
         if (bit_count == 12) {
             rx_state = CMD_READY;
-            rx_mode = rx_buffer & 0x0F;
-            rx_addr = (rx_buffer >> 4) & 0xFF;
+            rx_mode = rx_buffer & 0x0F;        // bits 0-3  = MODE  (now the real field)
+            rx_addr = (rx_buffer >> 4) & 0xFF; // bits 4-11 = ADDR
             cmd_ready = 1;
             G_LED_SetHigh(); __delay_us(500); G_LED_SetLow();
         }
@@ -188,7 +187,6 @@ void process_command(void) {
             cmd_ready = 0;
             t2_received = 0;
             response_phase = 0;
-            zero_cnt = 0;
             bit_count = 0;
             first_measure = 1;
             prev_ticks = TMR1;
@@ -280,7 +278,7 @@ void main(void) {
             if (response_phase >= 3) {
                 rx_state = IDLE;
                 response_phase = 0;
-                zero_cnt = 0;
+                bit_count = 0;
             }
         }
         __delay_us(100);
