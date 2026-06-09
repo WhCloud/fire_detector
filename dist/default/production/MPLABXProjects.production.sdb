@@ -1,0 +1,527 @@
+[p GLOBOPT AUTOSTATIC IEEE_DBL IEEE_FLT PIC14 PIC14E ]
+[d version 1.1 ]
+[d edition pro ]
+[d chip 16F1936 ]
+[d frameptr 6 ]
+"31 C:\Users\Professional\MPLABXProjects\main.c
+[e E2873 . `uc
+IDLE 0
+RECEIVING_BITS 1
+WAIT_T2 2
+CMD_READY 3
+]
+"38
+[e E2879 . `uc
+AWAIT_FIRST 0
+AWAIT_SECOND 1
+AWAIT_ADDR1 2
+AWAIT_ADDR2 3
+]
+"87 C:\Users\Professional\MPLABXProjects\mcc_generated_files/adc/src/adc.c
+[e E2791 . `uc
+ADC_CHANNEL_TEMP 29
+ADC_CHANNEL_DAC 30
+ADC_CHANNEL_FVR 31
+ADC_CHANNEL_AN0 0
+]
+"124
+[e E2797 . `uc
+ADC_TRIGGER_SOURCE_DISABLED 0
+]
+"10 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\common\sprcadd.c
+[v ___fladd __fladd `(d  1 e 4 0 ]
+"4 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\common\Umul8_16.c
+[v __Umul8_16 _Umul8_16 `(ui  1 e 2 0 ]
+"6 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\pic\__eeprom.c
+[v ___eecpymem __eecpymem `(v  1 e 1 0 ]
+"39
+[v ___memcpyee __memcpyee `(v  1 e 1 0 ]
+"51 C:\Users\Professional\MPLABXProjects\main.c
+[v _eeprom_read eeprom_read `(uc  1 e 1 0 ]
+"58
+[v _eeprom_write eeprom_write `(v  1 e 1 0 ]
+"71
+[v _protocol_on_bus_change protocol_on_bus_change `(v  1 e 1 0 ]
+"128
+[v _send_pulse send_pulse `(v  1 e 1 0 ]
+"136
+[v _send_type_bits send_type_bits `(v  1 e 1 0 ]
+"148
+[v _read_adc_rb1 read_adc_rb1 `(us  1 e 2 0 ]
+"158
+[v _send_response_phase send_response_phase `(v  1 e 1 0 ]
+"169
+[v _process_command process_command `(v  1 e 1 0 ]
+"242
+[v _main main `(v  1 e 1 0 ]
+"47 C:\Users\Professional\MPLABXProjects\mcc_generated_files/adc/src/adc.c
+[v _ADC_Initialize ADC_Initialize `(v  1 e 1 0 ]
+"158
+[v _ADC_ISR ADC_ISR `(v  1 e 1 0 ]
+"39 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/clock.c
+[v _CLOCK_Initialize CLOCK_Initialize `(v  1 e 1 0 ]
+"40 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/interrupt.c
+[v _INTERRUPT_Initialize INTERRUPT_Initialize `(v  1 e 1 0 ]
+"59
+[v _INTERRUPT_InterruptManager INTERRUPT_InterruptManager `II(v  1 e 1 0 ]
+"95
+[v _INT_CallBack INT_CallBack `(v  1 e 1 0 ]
+"104
+[v _INT_SetInterruptHandler INT_SetInterruptHandler `(v  1 e 1 0 ]
+"108
+[v _INT_DefaultInterruptHandler INT_DefaultInterruptHandler `(v  1 e 1 0 ]
+"39 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/pins.c
+[v _PIN_MANAGER_Initialize PIN_MANAGER_Initialize `(v  1 e 1 0 ]
+"102
+[v _PIN_MANAGER_IOC PIN_MANAGER_IOC `(v  1 e 1 0 ]
+"114
+[v _DATA_IN_ISR DATA_IN_ISR `(v  1 e 1 0 ]
+"129
+[v _DATA_IN_SetInterruptHandler DATA_IN_SetInterruptHandler `(v  1 e 1 0 ]
+"136
+[v _DATA_IN_DefaultInterruptHandler DATA_IN_DefaultInterruptHandler `(v  1 e 1 0 ]
+"39 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/system.c
+[v _SYSTEM_Initialize SYSTEM_Initialize `(v  1 e 1 0 ]
+"53 C:\Users\Professional\MPLABXProjects\mcc_generated_files/timer/src/tmr1.c
+[v _TMR1_Initialize TMR1_Initialize `(v  1 e 1 0 ]
+"121
+[v _TMR1_CounterSet TMR1_CounterSet `(v  1 e 1 0 ]
+"220
+[v _TMR1_DefaultOverflowCallback TMR1_DefaultOverflowCallback `(v  1 s 1 TMR1_DefaultOverflowCallback ]
+"230
+[v _TMR1_DefaultGateCallback TMR1_DefaultGateCallback `(v  1 s 1 TMR1_DefaultGateCallback ]
+[s S23 . 1 `uc 1 IOCIF 1 0 :1:0 
+`uc 1 INTF 1 0 :1:1 
+`uc 1 TMR0IF 1 0 :1:2 
+`uc 1 IOCIE 1 0 :1:3 
+`uc 1 INTE 1 0 :1:4 
+`uc 1 TMR0IE 1 0 :1:5 
+`uc 1 PEIE 1 0 :1:6 
+`uc 1 GIE 1 0 :1:7 
+]
+"372 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h
+[s S32 . 1 `uc 1 . 1 0 :2:0 
+`uc 1 T0IF 1 0 :1:2 
+`uc 1 . 1 0 :2:3 
+`uc 1 T0IE 1 0 :1:5 
+]
+[u S37 . 1 `S23 1 . 1 0 `S32 1 . 1 0 ]
+[v _INTCONbits INTCONbits `VES37  1 e 1 @11 ]
+[s S122 . 1 `uc 1 TMR1IF 1 0 :1:0 
+`uc 1 TMR2IF 1 0 :1:1 
+`uc 1 CCP1IF 1 0 :1:2 
+`uc 1 SSPIF 1 0 :1:3 
+`uc 1 TXIF 1 0 :1:4 
+`uc 1 RCIF 1 0 :1:5 
+`uc 1 ADIF 1 0 :1:6 
+`uc 1 TMR1GIF 1 0 :1:7 
+]
+"651
+[u S131 . 1 `S122 1 . 1 0 ]
+[v _PIR1bits PIR1bits `VES131  1 e 1 @17 ]
+"819
+[v _TMR1 TMR1 `VEus  1 e 2 @22 ]
+"826
+[v _TMR1L TMR1L `VEuc  1 e 1 @22 ]
+"846
+[v _TMR1H TMR1H `VEuc  1 e 1 @23 ]
+"866
+[v _T1CON T1CON `VEuc  1 e 1 @24 ]
+[s S337 . 1 `uc 1 TMR1ON 1 0 :1:0 
+`uc 1 . 1 0 :1:1 
+`uc 1 nT1SYNC 1 0 :1:2 
+`uc 1 T1OSCEN 1 0 :1:3 
+`uc 1 T1CKPS 1 0 :2:4 
+`uc 1 TMR1CS 1 0 :2:6 
+]
+"888
+[s S344 . 1 `uc 1 . 1 0 :4:0 
+`uc 1 T1CKPS0 1 0 :1:4 
+`uc 1 T1CKPS1 1 0 :1:5 
+`uc 1 TMR1CS0 1 0 :1:6 
+`uc 1 TMR1CS1 1 0 :1:7 
+]
+[u S350 . 1 `S337 1 . 1 0 `S344 1 . 1 0 ]
+[v _T1CONbits T1CONbits `VES350  1 e 1 @24 ]
+"938
+[v _T1GCON T1GCON `VEuc  1 e 1 @25 ]
+[s S403 . 1 `uc 1 T1GSS 1 0 :2:0 
+`uc 1 T1GVAL 1 0 :1:2 
+`uc 1 T1GGO_nDONE 1 0 :1:3 
+`uc 1 T1GSPM 1 0 :1:4 
+`uc 1 T1GTM 1 0 :1:5 
+`uc 1 T1GPOL 1 0 :1:6 
+`uc 1 TMR1GE 1 0 :1:7 
+]
+"960
+[s S411 . 1 `uc 1 T1GSS0 1 0 :1:0 
+`uc 1 T1GSS1 1 0 :1:1 
+`uc 1 . 1 0 :1:2 
+`uc 1 T1GGO 1 0 :1:3 
+]
+[u S416 . 1 `S403 1 . 1 0 `S411 1 . 1 0 ]
+[v _T1GCONbits T1GCONbits `VES416  1 e 1 @25 ]
+"1220
+[v _TRISA TRISA `VEuc  1 e 1 @140 ]
+[s S690 . 1 `uc 1 TRISA0 1 0 :1:0 
+`uc 1 TRISA1 1 0 :1:1 
+`uc 1 TRISA2 1 0 :1:2 
+`uc 1 TRISA3 1 0 :1:3 
+`uc 1 TRISA4 1 0 :1:4 
+`uc 1 TRISA5 1 0 :1:5 
+`uc 1 TRISA6 1 0 :1:6 
+`uc 1 TRISA7 1 0 :1:7 
+]
+"1237
+[u S699 . 1 `S690 1 . 1 0 ]
+[v _TRISAbits TRISAbits `VES699  1 e 1 @140 ]
+"1282
+[v _TRISB TRISB `VEuc  1 e 1 @141 ]
+"1344
+[v _TRISC TRISC `VEuc  1 e 1 @142 ]
+[s S669 . 1 `uc 1 TRISC0 1 0 :1:0 
+`uc 1 TRISC1 1 0 :1:1 
+`uc 1 TRISC2 1 0 :1:2 
+`uc 1 TRISC3 1 0 :1:3 
+`uc 1 TRISC4 1 0 :1:4 
+`uc 1 TRISC5 1 0 :1:5 
+`uc 1 TRISC6 1 0 :1:6 
+`uc 1 TRISC7 1 0 :1:7 
+]
+"1361
+[u S678 . 1 `S669 1 . 1 0 ]
+[v _TRISCbits TRISCbits `VES678  1 e 1 @142 ]
+"1406
+[v _TRISE TRISE `VEuc  1 e 1 @144 ]
+[s S101 . 1 `uc 1 TMR1IE 1 0 :1:0 
+`uc 1 TMR2IE 1 0 :1:1 
+`uc 1 CCP1IE 1 0 :1:2 
+`uc 1 SSPIE 1 0 :1:3 
+`uc 1 TXIE 1 0 :1:4 
+`uc 1 RCIE 1 0 :1:5 
+`uc 1 ADIE 1 0 :1:6 
+`uc 1 TMR1GIE 1 0 :1:7 
+]
+"1444
+[u S110 . 1 `S101 1 . 1 0 ]
+[v _PIE1bits PIE1bits `VES110  1 e 1 @145 ]
+[s S55 . 1 `uc 1 PS0 1 0 :1:0 
+`uc 1 PS1 1 0 :1:1 
+`uc 1 PS2 1 0 :1:2 
+`uc 1 PSA 1 0 :1:3 
+`uc 1 TMR0SE 1 0 :1:4 
+`uc 1 TMR0CS 1 0 :1:5 
+`uc 1 INTEDG 1 0 :1:6 
+`uc 1 nWPUEN 1 0 :1:7 
+]
+"1615
+[s S64 . 1 `uc 1 PS 1 0 :3:0 
+`uc 1 . 1 0 :1:3 
+`uc 1 T0SE 1 0 :1:4 
+`uc 1 T0CS 1 0 :1:5 
+]
+[u S69 . 1 `S55 1 . 1 0 `S64 1 . 1 0 ]
+[v _OPTION_REGbits OPTION_REGbits `VES69  1 e 1 @149 ]
+"1785
+[v _OSCTUNE OSCTUNE `VEuc  1 e 1 @152 ]
+"1843
+[v _OSCCON OSCCON `VEuc  1 e 1 @153 ]
+"1984
+[v _ADRESL ADRESL `VEuc  1 e 1 @155 ]
+"2004
+[v _ADRESH ADRESH `VEuc  1 e 1 @156 ]
+"2024
+[v _ADCON0 ADCON0 `VEuc  1 e 1 @157 ]
+[s S595 . 1 `uc 1 ADON 1 0 :1:0 
+`uc 1 GO_nDONE 1 0 :1:1 
+`uc 1 CHS 1 0 :5:2 
+]
+"2053
+[s S599 . 1 `uc 1 . 1 0 :1:0 
+`uc 1 ADGO 1 0 :1:1 
+`uc 1 CHS0 1 0 :1:2 
+`uc 1 CHS1 1 0 :1:3 
+`uc 1 CHS2 1 0 :1:4 
+`uc 1 CHS3 1 0 :1:5 
+`uc 1 CHS4 1 0 :1:6 
+]
+[s S607 . 1 `uc 1 . 1 0 :1:0 
+`uc 1 GO 1 0 :1:1 
+]
+[s S610 . 1 `uc 1 . 1 0 :1:0 
+`uc 1 nDONE 1 0 :1:1 
+]
+[u S613 . 1 `S595 1 . 1 0 `S599 1 . 1 0 `S607 1 . 1 0 `S610 1 . 1 0 ]
+[v _ADCON0bits ADCON0bits `VES613  1 e 1 @157 ]
+"2113
+[v _ADCON1 ADCON1 `VEuc  1 e 1 @158 ]
+"2185
+[v _LATA LATA `VEuc  1 e 1 @268 ]
+[s S572 . 1 `uc 1 LATA0 1 0 :1:0 
+`uc 1 LATA1 1 0 :1:1 
+`uc 1 LATA2 1 0 :1:2 
+`uc 1 LATA3 1 0 :1:3 
+`uc 1 LATA4 1 0 :1:4 
+`uc 1 LATA5 1 0 :1:5 
+`uc 1 LATA6 1 0 :1:6 
+`uc 1 LATA7 1 0 :1:7 
+]
+"2202
+[u S581 . 1 `S572 1 . 1 0 ]
+[v _LATAbits LATAbits `VES581  1 e 1 @268 ]
+"2247
+[v _LATB LATB `VEuc  1 e 1 @269 ]
+"2309
+[v _LATC LATC `VEuc  1 e 1 @270 ]
+[s S545 . 1 `uc 1 LATC0 1 0 :1:0 
+`uc 1 LATC1 1 0 :1:1 
+`uc 1 LATC2 1 0 :1:2 
+`uc 1 LATC3 1 0 :1:3 
+`uc 1 LATC4 1 0 :1:4 
+`uc 1 LATC5 1 0 :1:5 
+`uc 1 LATC6 1 0 :1:6 
+`uc 1 LATC7 1 0 :1:7 
+]
+"2326
+[u S554 . 1 `S545 1 . 1 0 ]
+[v _LATCbits LATCbits `VES554  1 e 1 @270 ]
+"2371
+[v _LATE LATE `VEuc  1 e 1 @272 ]
+"2664
+[v _BORCON BORCON `VEuc  1 e 1 @278 ]
+"3069
+[v _ANSELA ANSELA `VEuc  1 e 1 @396 ]
+"3127
+[v _ANSELB ANSELB `VEuc  1 e 1 @397 ]
+"3192
+[v _EEADRL EEADRL `VEuc  1 e 1 @401 ]
+"3239
+[v _EEDATL EEDATL `VEuc  1 e 1 @403 ]
+[s S503 . 1 `uc 1 RD 1 0 :1:0 
+`uc 1 WR 1 0 :1:1 
+`uc 1 WREN 1 0 :1:2 
+`uc 1 WRERR 1 0 :1:3 
+`uc 1 FREE 1 0 :1:4 
+`uc 1 LWLO 1 0 :1:5 
+`uc 1 CFGS 1 0 :1:6 
+`uc 1 EEPGD 1 0 :1:7 
+]
+"3314
+[u S512 . 1 `S503 1 . 1 0 ]
+[v _EECON1bits EECON1bits `VES512  1 e 1 @405 ]
+"3359
+[v _EECON2 EECON2 `VEuc  1 e 1 @406 ]
+"3694
+[v _WPUB WPUB `VEuc  1 e 1 @525 ]
+"3764
+[v _WPUE WPUE `VEuc  1 e 1 @528 ]
+"5782
+[v _IOCBP IOCBP `VEuc  1 e 1 @916 ]
+"5852
+[v _IOCBN IOCBN `VEuc  1 e 1 @917 ]
+"5922
+[v _IOCBF IOCBF `VEuc  1 e 1 @918 ]
+[s S286 . 1 `uc 1 IOCBF0 1 0 :1:0 
+`uc 1 IOCBF1 1 0 :1:1 
+`uc 1 IOCBF2 1 0 :1:2 
+`uc 1 IOCBF3 1 0 :1:3 
+`uc 1 IOCBF4 1 0 :1:4 
+`uc 1 IOCBF5 1 0 :1:5 
+`uc 1 IOCBF6 1 0 :1:6 
+`uc 1 IOCBF7 1 0 :1:7 
+]
+"5942
+[s S295 . 1 `uc 1 IOCBF 1 0 :8:0 
+]
+[u S297 . 1 `S286 1 . 1 0 `S295 1 . 1 0 ]
+[v _IOCBFbits IOCBFbits `VES297  1 e 1 @918 ]
+"31 C:\Users\Professional\MPLABXProjects\main.c
+[v _rx_state rx_state `VEE2873  1 e 1 0 ]
+"32
+[v _bit_count bit_count `VEuc  1 e 1 0 ]
+"33
+[v _rx_buffer rx_buffer `VEul  1 e 4 0 ]
+"34
+[v _cmd_ready cmd_ready `VEuc  1 e 1 0 ]
+"35
+[v _rx_mode rx_mode `VEuc  1 e 1 0 ]
+"36
+[v _rx_addr rx_addr `VEuc  1 e 1 0 ]
+"38
+[v _set_addr_state set_addr_state `VEE2879  1 e 1 0 ]
+"39
+[v _new_address new_address `VEuc  1 e 1 0 ]
+"40
+[v _my_address my_address `uc  1 e 1 0 ]
+"42
+[v _reset_counter reset_counter `uc  1 s 1 reset_counter ]
+"43
+[v _activate_counter activate_counter `uc  1 s 1 activate_counter ]
+"45
+[v _t2_received t2_received `VEuc  1 e 1 0 ]
+"46
+[v _response_phase response_phase `VEuc  1 e 1 0 ]
+"47
+[v _prev_ticks prev_ticks `VEus  1 e 2 0 ]
+"48
+[v _first_measure first_measure `VEuc  1 e 1 0 ]
+"49
+[v _zero_cnt zero_cnt `VEuc  1 e 1 0 ]
+"45 C:\Users\Professional\MPLABXProjects\mcc_generated_files/adc/src/adc.c
+[v _ADC_ConversionDoneCallback ADC_ConversionDoneCallback `*.37(v  1 s 2 ADC_ConversionDoneCallback ]
+"38 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/interrupt.c
+[v _INT_InterruptHandler INT_InterruptHandler `*.37(v  1 e 2 0 ]
+"37 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/pins.c
+[v _DATA_IN_InterruptHandler DATA_IN_InterruptHandler `*.37(v  1 e 2 0 ]
+"47 C:\Users\Professional\MPLABXProjects\mcc_generated_files/timer/src/tmr1.c
+[v _timer1ReloadVal timer1ReloadVal `VEus  1 s 2 timer1ReloadVal ]
+"48
+[v _TMR1_OverflowCallback TMR1_OverflowCallback `*.37(v  1 s 2 TMR1_OverflowCallback ]
+"50
+[v _TMR1_GateCallback TMR1_GateCallback `*.37(v  1 s 2 TMR1_GateCallback ]
+"242 C:\Users\Professional\MPLABXProjects\main.c
+[v _main main `(v  1 e 1 0 ]
+{
+"250
+[v main@i i `i  1 a 2 10 ]
+"288
+} 0
+"158
+[v _send_response_phase send_response_phase `(v  1 e 1 0 ]
+{
+"160
+[v send_response_phase@pulse_us pulse_us `us  1 a 2 5 ]
+"159
+[v send_response_phase@adc_val adc_val `us  1 a 2 3 ]
+"167
+} 0
+"136
+[v _send_type_bits send_type_bits `(v  1 e 1 0 ]
+{
+[v send_type_bits@type type `uc  1 p 1 wreg ]
+"137
+[v send_type_bits@i i `uc  1 a 1 2 ]
+"136
+[v send_type_bits@type type `uc  1 p 1 wreg ]
+[v send_type_bits@type type `uc  1 p 1 1 ]
+"146
+} 1
+"128
+[v _send_pulse send_pulse `(v  1 e 1 0 ]
+{
+[v send_pulse@us us `us  1 p 2 0 ]
+"134
+} 0
+"148
+[v _read_adc_rb1 read_adc_rb1 `(us  1 e 2 0 ]
+{
+"156
+} 0
+"169
+[v _process_command process_command `(v  1 e 1 0 ]
+{
+"181
+[v process_command@i i `i  1 a 2 4 ]
+"209
+[v process_command@i_797 i `i  1 a 2 6 ]
+"172
+[v process_command@s s `E2879  1 s 1 s ]
+"240
+} 0
+"58
+[v _eeprom_write eeprom_write `(v  1 e 1 0 ]
+{
+[v eeprom_write@addr addr `uc  1 p 1 wreg ]
+[v eeprom_write@addr addr `uc  1 p 1 wreg ]
+[v eeprom_write@data data `uc  1 p 1 0 ]
+[v eeprom_write@addr addr `uc  1 p 1 1 ]
+"69
+} 1
+"51
+[v _eeprom_read eeprom_read `(uc  1 e 1 0 ]
+{
+[v eeprom_read@addr addr `uc  1 p 1 wreg ]
+[v eeprom_read@addr addr `uc  1 p 1 wreg ]
+[v eeprom_read@addr addr `uc  1 p 1 0 ]
+"56
+} 1
+"39 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/system.c
+[v _SYSTEM_Initialize SYSTEM_Initialize `(v  1 e 1 0 ]
+{
+"46
+} 0
+"53 C:\Users\Professional\MPLABXProjects\mcc_generated_files/timer/src/tmr1.c
+[v _TMR1_Initialize TMR1_Initialize `(v  1 e 1 0 ]
+{
+"80
+} 0
+"39 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/pins.c
+[v _PIN_MANAGER_Initialize PIN_MANAGER_Initialize `(v  1 e 1 0 ]
+{
+"100
+} 0
+"129
+[v _DATA_IN_SetInterruptHandler DATA_IN_SetInterruptHandler `(v  1 e 1 0 ]
+{
+[v DATA_IN_SetInterruptHandler@InterruptHandler InterruptHandler `*.37(v  1 p 2 0 ]
+"131
+} 0
+"40 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/interrupt.c
+[v _INTERRUPT_Initialize INTERRUPT_Initialize `(v  1 e 1 0 ]
+{
+"50
+} 0
+"104
+[v _INT_SetInterruptHandler INT_SetInterruptHandler `(v  1 e 1 0 ]
+{
+[v INT_SetInterruptHandler@InterruptHandler InterruptHandler `*.37(v  1 p 2 0 ]
+"106
+} 0
+"39 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/clock.c
+[v _CLOCK_Initialize CLOCK_Initialize `(v  1 e 1 0 ]
+{
+"46
+} 0
+"47 C:\Users\Professional\MPLABXProjects\mcc_generated_files/adc/src/adc.c
+[v _ADC_Initialize ADC_Initialize `(v  1 e 1 0 ]
+{
+"65
+} 0
+"59 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/interrupt.c
+[v _INTERRUPT_InterruptManager INTERRUPT_InterruptManager `II(v  1 e 1 0 ]
+{
+"84
+} 0
+"102 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/pins.c
+[v _PIN_MANAGER_IOC PIN_MANAGER_IOC `(v  1 e 1 0 ]
+{
+"109
+} 0
+"114
+[v _DATA_IN_ISR DATA_IN_ISR `(v  1 e 1 0 ]
+{
+"124
+} 0
+"136
+[v _DATA_IN_DefaultInterruptHandler DATA_IN_DefaultInterruptHandler `(v  1 e 1 0 ]
+{
+"139
+} 0
+"71 C:\Users\Professional\MPLABXProjects\main.c
+[v _protocol_on_bus_change protocol_on_bus_change `(v  1 e 1 0 ]
+{
+"72
+[v protocol_on_bus_change@cur cur `us  1 a 2 9 ]
+"83
+[v protocol_on_bus_change@us us `us  1 a 2 7 ]
+"73
+[v protocol_on_bus_change@delta delta `us  1 a 2 4 ]
+"96
+[v protocol_on_bus_change@bit bit `uc  1 a 1 6 ]
+"126
+} 0
+"158 C:\Users\Professional\MPLABXProjects\mcc_generated_files/adc/src/adc.c
+[v _ADC_ISR ADC_ISR `(v  1 e 1 0 ]
+{
+"170
+} 0
