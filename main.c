@@ -41,8 +41,16 @@
 
 #define BIT_TICKS    US_TO_TICKS(450)    /* порог 0/1 для бита данных            */
 #define GAP_TICKS    US_TO_TICKS(4000)   /* >= этого интервал считается паузой   */
-#define T2_MIN_TICKS US_TO_TICKS(80)     /* окно метки-синхронизации T2 ответа   */
-#define T2_MAX_TICKS US_TO_TICKS(320)    /* метки панели ~170 мкс                */
+
+/* Окно метки T2 панели (~170 мкс). ВАЖНО: верхняя граница НИЖЕ 300 мкс, иначе в
+ * окно попадают собственные импульсы ответа (type-биты 300 мкс) и короткие
+ * импульсы панели -> ложные/преждевременные фазы ("не ждёт синхро"). */
+#define T2_MIN_TICKS US_TO_TICKS(100)
+#define T2_MAX_TICKS US_TO_TICKS(200)
+
+/* Длинный импульс перед фазами ответа: Sync (~600 мкс) или окно ответа (~2 мс).
+ * Пока он не пришёл, метки T2 НЕ обрабатываем — это и есть «ждать синхро». */
+#define SYNC_TICKS   US_TO_TICKS(400)
 
 /* Сколько итераций main без единого кадра считать «шина молчит» и сбрасывать
  * накопленные многокадровые состояния (set-address / reset / activation).
@@ -60,6 +68,7 @@ volatile uint8_t  rx_mode     = 0;
 volatile uint8_t  rx_addr     = 0;
 
 volatile uint8_t  in_response = 0;       /* идёт последовательность ответа        */
+volatile uint8_t  resp_armed  = 0;       /* увидели Sync/окно — теперь ловим метки */
 volatile uint8_t  resp_phase  = 0;       /* 0=Smoke, 1=Type, 2=Heat               */
 volatile uint8_t  resp_request= 0;       /* ISR -> main: пришла метка, шлём фазу   */
 
@@ -111,14 +120,19 @@ void protocol_on_bus_change(void) {
         bit_count    = 0;        /* этот фронт — начало кадра (seed), не бит */
         rx_buffer    = 0;
         in_response  = 0;        /* новый кадр отменяет незавершённый ответ  */
+        resp_armed   = 0;
         resp_phase   = 0;
         return;
     }
 
-    /* --- Фаза ответа: ждём метки T2 от панели, чтобы выдать очередную фазу --- */
+    /* --- Фаза ответа --- */
     if (in_response) {
-        if (delta >= T2_MIN_TICKS && delta <= T2_MAX_TICKS) {
-            resp_request = 1;
+        if (!resp_armed) {
+            /* Сначала дожидаемся Sync/окна (длинный импульс) — НЕ реагируем на
+             * короткие импульсы, пока панель не открыла слот ответа. */
+            if (delta >= SYNC_TICKS) resp_armed = 1;
+        } else if (delta >= T2_MIN_TICKS && delta <= T2_MAX_TICKS) {
+            resp_request = 1;    /* метка T2 -> main выдаёт очередную фазу */
         }
         return;
     }
@@ -238,7 +252,8 @@ void process_command(void) {
     switch (rx_mode) {
         case 0:                      /* чтение/опрос */
         case 4:                      /* ответ извещателя */
-            in_response = 1;         /* ISR начнёт выдавать фазы по меткам T2 */
+            in_response = 1;         /* ждём Sync/окно, затем фазы по меткам T2 */
+            resp_armed  = 0;
             resp_phase  = 0;
             resp_request= 0;
             reset_counter    = 0;
@@ -336,6 +351,7 @@ void main(void) {
             send_response_phase(resp_phase);
             if (++resp_phase >= 3) {
                 in_response = 0;
+                resp_armed  = 0;
                 resp_phase  = 0;
             }
         }
