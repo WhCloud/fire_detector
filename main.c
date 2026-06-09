@@ -14,6 +14,12 @@
 #define T2_MIN_US 100
 #define T2_MAX_US 160
 
+// Простой всей шины дольше ~100 мс => сброс накопителей команд (mode 1/2/3),
+// чтобы протухшее частичное состояние не жило вечно. Цикл main = ~100 мкс/итерация,
+// поэтому 1000 итераций ~ 100 мс. Порог должен быть выше штатного межфреймового
+// зазора 20-35 мс, иначе ложные сбросы.
+#define IDLE_RESET_LOOPS 1000
+
 typedef enum {
     IDLE,
     RECEIVING_BITS,
@@ -168,14 +174,14 @@ void send_response_phase(void) {
 void process_command(void) {
     // ========== ОБРАБОТКА MODE 1 (УСТАНОВКА АДРЕСА) ==========
     if (rx_mode == 1 || rx_mode == 8) {
-        static set_addr_state_t s = AWAIT_FIRST;
-        if (s == AWAIT_FIRST && rx_addr == 0x55) s = AWAIT_SECOND;
-        else if (s == AWAIT_SECOND && rx_addr == 0x3A) s = AWAIT_ADDR1;
-        else if (s == AWAIT_ADDR1) { new_address = rx_addr; s = AWAIT_ADDR2; }
-        else if (s == AWAIT_ADDR2 && rx_addr == new_address) {
+        // Стейт-машина в глобале set_addr_state, чтобы idle-таймаут в main мог её сбросить.
+        if (set_addr_state == AWAIT_FIRST && rx_addr == 0x55) set_addr_state = AWAIT_SECOND;
+        else if (set_addr_state == AWAIT_SECOND && rx_addr == 0x3A) set_addr_state = AWAIT_ADDR1;
+        else if (set_addr_state == AWAIT_ADDR1) { new_address = rx_addr; set_addr_state = AWAIT_ADDR2; }
+        else if (set_addr_state == AWAIT_ADDR2 && rx_addr == new_address) {
             eeprom_write(0, new_address);
             my_address = new_address;
-            s = AWAIT_FIRST;
+            set_addr_state = AWAIT_FIRST;
             // Успех: мигаем зелёным 2 раза
             for (int i = 0; i < 2; i++) {
                 G_LED_SetHigh(); __delay_ms(100);
@@ -197,7 +203,7 @@ void process_command(void) {
             __delay_ms(10);
             // ------------------------------------------------------------
         } else {
-            s = AWAIT_FIRST;
+            set_addr_state = AWAIT_FIRST;
         }
         return;
     }
@@ -266,10 +272,20 @@ void main(void) {
 
     G_LED_SetHigh(); __delay_ms(100); G_LED_SetLow();
 
+    uint16_t idle_loops = 0;
     while (1) {
         if (cmd_ready) {
             cmd_ready = 0;
             process_command();
+            idle_loops = 0;                 // любой фрейм на шине = активность
+        } else if (++idle_loops >= IDLE_RESET_LOOPS) {
+            // Вся шина молчит дольше порога => сброс протухших накопителей.
+            // Не трогает mode 2/3 во время штатного опроса: фреймы к другим
+            // адресам тоже сбрасывают idle_loops.
+            idle_loops = 0;
+            reset_counter = 0;
+            activate_counter = 0;
+            set_addr_state = AWAIT_FIRST;
         }
         if (rx_state == WAIT_T2 && t2_received) {
             t2_received = 0;
