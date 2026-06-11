@@ -361,15 +361,29 @@ void main(void) {
         }
 
         /* Выдача фаз ответа по меткам T2 (флаг ставит ISR). */
-        if (in_response && resp_request) {
-            resp_request = 0;
-            send_response_phase(resp_phase);
-            if (++resp_phase >= 3) {
-                in_response = 0;
-                resp_armed  = 0;
-                resp_phase  = 0;
-            }
-        }
+		if (in_response && resp_request) {
+			resp_request = 0;
+
+			/* Глушим вход на время передачи: собственные импульсы ответа идут по той же
+			 * шине и иначе возвращаются в ISR, ложно взводя resp_request/границу кадра. */
+			IOCBP = 0x0;
+			IOCBN = 0x0;
+
+			send_response_phase(resp_phase);
+
+			prev_ticks       = TMR1;   /* опорная точка заново — чтобы пауза не сошла за GAP */
+			IOCBF            = 0x0;     /* сбросить флаги, накопленные за передачу           */
+			PIR1bits.TMR1IF  = 0;
+			resp_request     = 0;       /* и фантомный запрос от собственного фронта          */
+			IOCBP = 0x1;
+			IOCBN = 0x1;
+
+			if (++resp_phase >= 3) {
+				in_response = 0;
+				resp_armed  = 0;
+				resp_phase  = 0;
+			}
+		}
 
         __delay_us(100);
     }
