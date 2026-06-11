@@ -198,10 +198,10 @@ uint16_t read_adc_rb1(void) {
 
 void send_response_phase(uint8_t phase) {
     uint16_t adc_val  = read_adc_rb1();
-    uint16_t pulse_us = (adc_val < 20) ? 800 : 1800;
+    uint16_t pulse_us = (adc_val < 20) ? 1800 : 800;
     switch (phase) {
         case 0: send_pulse(pulse_us); break;   /* Smoke */
-        case 1: send_type_bits(0x06); break;   /* Type = выходной модуль */
+        case 1: send_type_bits(0x04); break;   /* Type = выходной модуль */
         case 2: send_pulse(pulse_us); break;   /* Heat  */
         default: break;
     }
