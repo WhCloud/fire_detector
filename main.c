@@ -62,13 +62,6 @@
  * Пока он не пришёл, метки T2 НЕ обрабатываем — это и есть «ждать синхро». */
 #define SYNC_TICKS   US_TO_TICKS(400)
 
-/* ---- Тайминги самотактируемого ответа (номинал спеки; ТЮНИТЬ по осц.) ----
- * Окна выборки панели: Smoke 2 мс, Type 900 мкс, Heat 2 мс; метка T2 150 мкс.
- * Ответ идёт по ТОЙ ЖЕ шине, что приём, поэтому фазы выдаём сами по таймеру,
- * а не клокаем по меткам RB0 — наш собственный TX глушил/сдвигал метки 2/3. */
-#define RESP_SMOKE_WIN_US  2000u   /* окно Smoke -> выровнять старт Type */
-#define RESP_MARKER_US      150u   /* метка T2 между окнами             */
-
 /* Сколько итераций main без единого кадра считать «шина молчит» и сбрасывать
  * накопленные многокадровые состояния (set-address / reset / activation).
  * Холостая итерация ~100 мкс, кадры при опросе идут каждые ~29 мс, полная
@@ -88,6 +81,7 @@ volatile uint8_t  in_response = 0;       /* идёт последователь�
 volatile uint8_t  resp_armed  = 0;       /* увидели Sync/окно — теперь ловим метки */
 volatile uint8_t  resp_phase  = 0;       /* 0=Smoke, 1=Type, 2=Heat               */
 volatile uint8_t  resp_request= 0;       /* ISR -> main: пришла метка, шлём фазу   */
+uint16_t          resp_pull_us = CURRENT_WIDTH_LOW; /* предчитанная ширина тока Smoke/Heat */
 
 /* ---- Многокадровые состояния (обрабатываются в main) ---- */
 typedef enum { AWAIT_FIRST, AWAIT_SECOND, AWAIT_ADDR1, AWAIT_ADDR2 } set_addr_state_t;
@@ -177,19 +171,10 @@ void protocol_on_bus_change(void) {
 /* =========================================================================
  *  Передатчик ответа (Mode 0/4) — модуляция тока на DATA_OUT
  *
- *  Ответ идёт по ТОЙ ЖЕ шине, что и приём. Наш pull-back ток виден на RB0 и
- *  глушит/сдвигает метки T2 2-й и 3-й фаз -> клокать фазы по отдельным меткам
- *  нельзя. Поэтому весь ответ выдаётся самотактируемо одним burst, а IOC на это
- *  время заглушается снаружи (см. send_full_response и главный цикл).
+ *  Ответ идёт по ТОЙ ЖЕ шине, что и приём: наш pull-back ток виден на RB0.
+ *  Поэтому на время КАЖДОГО импульса IOC глушится снаружи (см. главный цикл),
+ *  а фазы выдаются СТРОГО по меткам T2 — одна метка = одна фаза.
  * ========================================================================= */
-
-/* Задержка переменной длины: __delay_us требует константу. Крупные чанки —
- * меньше дрейфа от оверхеда цикла. Точность тока (он кодирует значение) даёт
- * send_pulse через константный __delay_us; здесь — только паузы между фазами. */
-static void delay_us_var(uint16_t us) {
-    while (us >= 50u) { __delay_us(50); us -= 50u; }
-    while (us)        { __delay_us(1);  us--;      }
-}
 
 void send_pulse(uint16_t us) {
     DATA_OUT_SetHigh();
@@ -221,22 +206,15 @@ uint16_t read_adc_rb1(void) {
     return ((uint16_t)ADRESH << 8) | ADRESL;
 }
 
-/* Весь ответ: Smoke -> Type -> Heat, самотактируемо. Вызывать ОДИН раз по первой
- * метке T2; IOC должен быть заглушён снаружи на всё время burst. */
-void send_full_response(void) {
-    uint16_t adc_val = read_adc_rb1();
-    uint16_t pull_us = (adc_val < 20) ? CURRENT_WIDTH_HIGH : CURRENT_WIDTH_LOW;   /* ширина тока = значение */
-
-    /* Smoke: ток в окне Smoke, затем добор остатка окна + метка -> к окну Type */
-    send_pulse(pull_us);
-    delay_us_var((uint16_t)(RESP_SMOKE_WIN_US - pull_us) + RESP_MARKER_US);
-
-    /* Type: 4 бита по 300 мкс, LSB first (MODULE_TYPE = выходной модуль) */
-    send_type_bits(MODULE_TYPE);
-    delay_us_var(RESP_MARKER_US);          /* метка -> к окну Heat */
-
-    /* Heat: ток в окне Heat (последняя фаза, хвост не нужен) */
-    send_pulse(pull_us);
+/* Одна фаза ответа по метке T2. Значение тока (resp_pull_us) предчитано на старте
+ * ответа -> здесь только блокирующий импульс, минимум задержки метка->импульс. */
+void send_response_phase(uint8_t phase) {
+    switch (phase) {
+        case 0: send_pulse(resp_pull_us);    break;   /* Smoke */
+        case 1: send_type_bits(MODULE_TYPE); break;   /* Type  */
+        case 2: send_pulse(resp_pull_us);    break;   /* Heat  */
+        default: break;
+    }
 }
 
 /* =========================================================================
@@ -301,6 +279,7 @@ void process_command(void) {
             resp_armed  = 0;
             resp_phase  = 0;
             resp_request= 0;
+            resp_pull_us = (read_adc_rb1() < 20) ? CURRENT_WIDTH_HIGH : CURRENT_WIDTH_LOW; /* предчитать значение */
             reset_counter    = 0;
             activate_counter = 0;
             break;
@@ -392,31 +371,28 @@ void main(void) {
             reset_sequencers();             /* шина молчит — сбрасываем недобранные последовательности */
         }
 
-        /* Первая метка T2 -> выдаём ВЕСЬ ответ самотактируемо (Smoke/Type/Heat).
-		 * На метки 2/3 не полагаемся — их глушил наш собственный TX по той же шине. */
-		if (in_response && resp_request) {
-			resp_request = 0;
+        /* Одна метка T2 -> ОДНА фаза, строго ПОСЛЕ обнаружения метки (ISR ставит
+         * resp_request). Heat уходит только после 3-й метки T2. */
+        if (in_response && resp_request) {
+            resp_request = 0;
 
-			/* Глушим вход на время передачи: собственные импульсы ответа идут по той же
-			 * шине и иначе возвращаются в ISR, ложно взводя resp_request/границу кадра. */
-			IOCBP = 0x0;
-			IOCBN = 0x0;
+            /* Глушим вход ТОЛЬКО на время своего импульса: ток ответа виден на RB0.
+             * prev_ticks НЕ ресинкаем — следующая метка T2 ловится по своим краям;
+             * resync ставил опору в середину окна, и край окна читался как метка. */
+            IOCBP = 0x0;
+            IOCBN = 0x0;
+            send_response_phase(resp_phase);
+            IOCBF = 0x0;            /* съесть флаги собственных фронтов */
+            IOCBP = 0x1;
+            IOCBN = 0x1;
 
-			send_full_response();   /* все 3 фазы за один проход, IOC заглушён */
+            if (++resp_phase >= 3) {   /* выдали Smoke+Type+Heat -> ответ завершён */
+                in_response = 0;
+                resp_armed  = 0;
+                resp_phase  = 0;
+            }
+        }
 
-			prev_ticks       = TMR1;   /* опорная точка заново — чтобы пауза не сошла за GAP */
-			IOCBF            = 0x0;     /* сбросить флаги, накопленные за передачу           */
-			PIR1bits.TMR1IF  = 0;
-			resp_request     = 0;       /* и фантомный запрос от собственного фронта          */
-			IOCBP = 0x1;
-			IOCBN = 0x1;
-
-			/* burst выдал все 3 фазы -> ответ завершён за один вызов */
-			in_response = 0;
-			resp_armed  = 0;
-			resp_phase  = 0;
-		}
-
-        __delay_us(100);
+        if (!in_response) __delay_us(100);   /* в ответе — минимум задержки метка->импульс */
     }
 }
