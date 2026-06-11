@@ -255,11 +255,12 @@ void process_command(void) {
                 if (rx_addr == new_address) {
                     eeprom_write(0, new_address);
                     my_address = new_address;
-                    /* подтверждение: два зелёных мигания */
-                    for (uint8_t i = 0; i < 2; i++) {
-                        G_LED_SetHigh(); __delay_ms(100);
-                        G_LED_SetLow();  __delay_ms(100);
-                    }
+                    /* НИКАКИХ блокирующих задержек здесь. Панель через ~46 мс шлёт
+                     * Mode 0 на новый адрес для проверки записи; старая подтверждающая
+                     * мигалка (4x __delay_ms(100) = 400 мс) держала main и съедала этот
+                     * опрос -> устройство «не отвечало» после установки адреса.
+                     * EEPROM-запись на 16F1936 идёт в фоне (~4 мс), CPU не стопит,
+                     * а ответ использует my_address из RAM (выставлен выше). */
                 }
                 set_addr_state = AWAIT_FIRST;
                 break;
