@@ -186,14 +186,13 @@ void protocol_on_bus_change(void) {
  *  а фазы выдаются СТРОГО по меткам T2 — одна метка = одна фаза.
  * ========================================================================= */
 
+/* Импульс тока заданной ширины. Чанки покрупнее -> меньше итераций -> меньше
+ * дрейф от оверхеда цикла (сборка -O0); ширина импульса кодирует значение. */
 void send_pulse(uint16_t us) {
     DATA_OUT_SetHigh();
-    if (0 != us) {
-        uint16_t cyclesToWait = (us + 9) / 10;
-        while (cyclesToWait--) {
-            __delay_us(10);
-        }
-    }
+    while (us >= 100u) { __delay_us(100); us -= 100u; }
+    while (us >= 10u)  { __delay_us(10);  us -= 10u;  }
+    while (us)         { __delay_us(1);   us--;       }
     DATA_OUT_SetLow();
 }
 
@@ -210,7 +209,7 @@ void send_type_bits(uint8_t type) {
 }
 
 uint16_t read_adc_rb1(void) {
-    ADCON1 = 0x80;
+    ADCON1 = 0xA0;   /* ADFM=1 (right), ADCS=Fosc/32 (Tad=2мкс @16МГц; Fosc/2 был вне спеки 1мкс), ADPREF=VDD */
     ADCON0 = 0x01;
     ADCON0bits.CHS = 0;
     __delay_us(10);
@@ -242,7 +241,10 @@ static void reset_sequencers(void) {
 static uint16_t convert_adc_to_pulse_usec(uint16_t adc_val) {
     uint16_t _pulse_width = 0;
     
-    uint16_t adc_val_mvolts = ADC_REF_MVOLTS / 1024 * adc_val;
+    /* УМНОЖАТЬ до деления и в 32 битах. Иначе ADC_REF_MVOLTS/1024 = 5000/1024 = 4
+     * (целочисленно, не 4.88) -> шкала занижена ~18%: 300мВ читается ~244мВ и
+     * вылетает из окна -> импульс 0; ширины тоже врут. (5000*1023 > uint16.) */
+    uint16_t adc_val_mvolts = (uint16_t)((uint32_t)ADC_REF_MVOLTS * adc_val / 1024u);
     if ((adc_val_mvolts >= ADC_VALUE_LOW) && (adc_val_mvolts <= ADC_VALUE_HIGH)) {
         _pulse_width = (CURRENT_WIDTH_HIGH + CURRENT_WIDTH_LOW) - 2 * adc_val_mvolts;
     }
