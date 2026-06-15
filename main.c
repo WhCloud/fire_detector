@@ -42,8 +42,11 @@
 #define _XTAL_FREQ 16000000
 
 #define MODULE_TYPE	0x04
-#define CURRENT_WIDTH_LOW 800
-#define CURRENT_WIDTH_HIGH 1800
+#define CURRENT_WIDTH_LOW 600
+#define CURRENT_WIDTH_HIGH 2000
+#define ADC_REF_MVOLTS 5000
+#define ADC_VALUE_HIGH 1000
+#define ADC_VALUE_LOW 300
 
 /* TMR1 = Fosc/4 (4 МГц) с прескалером 1:8 => 0.5 МГц => 2 мкс на тик.
  * Прескалер 1:8 КРИТИЧЕН: переполнение раз в 131 мс (65536*2 мкс) — заметно
@@ -185,9 +188,9 @@ void protocol_on_bus_change(void) {
 
 void send_pulse(uint16_t us) {
     DATA_OUT_SetHigh();
-    if      (us == CURRENT_WIDTH_LOW)  __delay_us(CURRENT_WIDTH_LOW);
-    else if (us == CURRENT_WIDTH_HIGH) __delay_us(CURRENT_WIDTH_HIGH);
-    else                 __delay_us(1000);
+    if (0 != us) {
+        __delay_us(us);
+    }
     DATA_OUT_SetLow();
 }
 
@@ -231,6 +234,17 @@ static void reset_sequencers(void) {
     set_addr_state   = AWAIT_FIRST;
     reset_counter    = 0;
     activate_counter = 0;
+}
+
+static uint16_t convert_adc_to_pulse_usec(uint16_t adc_val) {
+    uint16_t _pulse_width = 0;
+    
+    uint16_t adc_val_mvolts = ADC_REF_MVOLTS / 1024 * adc_val;
+    if ((adc_val_mvolts >= ADC_VALUE_LOW) && (adc_val_mvolts <= ADC_VALUE_HIGH)) {
+        _pulse_width = (CURRENT_WIDTH_HIGH + CURRENT_WIDTH_LOW) - 2 * adc_val_mvolts;
+    }
+    
+    return _pulse_width;
 }
 
 /* =========================================================================
@@ -287,7 +301,7 @@ void process_command(void) {
             resp_armed  = 0;
             resp_phase  = 0;
             resp_request= 0;
-            resp_pull_us = (read_adc_rb1() < 20) ? CURRENT_WIDTH_HIGH : CURRENT_WIDTH_LOW; /* предчитать значение */
+            resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
             reset_counter    = 0;
             activate_counter = 0;
             break;
