@@ -206,7 +206,7 @@ void send_type_bits(uint8_t type) {
 uint16_t read_adc_rb1(void) {
     ADCON1 = 0x80;
     ADCON0 = 0x01;
-    ADCON0bits.CHS = 4;
+    ADCON0bits.CHS = 0;
     __delay_us(10);
     ADCON0bits.GO = 1;
     while (ADCON0bits.GO);

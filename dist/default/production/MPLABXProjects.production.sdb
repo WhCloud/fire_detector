@@ -3,15 +3,8 @@
 [d edition pro ]
 [d chip 16F1936 ]
 [d frameptr 6 ]
-"31 C:\Users\Professional\MPLABXProjects\main.c
-[e E2873 . `uc
-IDLE 0
-RECEIVING_BITS 1
-WAIT_T2 2
-CMD_READY 3
-]
-"38
-[e E2879 . `uc
+"91 C:\Users\Professional\MPLABXProjects\main.c
+[e E2884 . `uc
 AWAIT_FIRST 0
 AWAIT_SECOND 1
 AWAIT_ADDR1 2
@@ -36,23 +29,25 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 [v ___eecpymem __eecpymem `(v  1 e 1 0 ]
 "39
 [v ___memcpyee __memcpyee `(v  1 e 1 0 ]
-"51 C:\Users\Professional\MPLABXProjects\main.c
+"100 C:\Users\Professional\MPLABXProjects\main.c
 [v _eeprom_read eeprom_read `(uc  1 e 1 0 ]
-"58
+"107
 [v _eeprom_write eeprom_write `(v  1 e 1 0 ]
-"71
+"124
 [v _protocol_on_bus_change protocol_on_bus_change `(v  1 e 1 0 ]
-"128
+"186
 [v _send_pulse send_pulse `(v  1 e 1 0 ]
-"136
+"194
 [v _send_type_bits send_type_bits `(v  1 e 1 0 ]
-"148
+"206
 [v _read_adc_rb1 read_adc_rb1 `(us  1 e 2 0 ]
-"158
+"218
 [v _send_response_phase send_response_phase `(v  1 e 1 0 ]
-"169
+"230
+[v _reset_sequencers reset_sequencers `(v  1 s 1 reset_sequencers ]
+"239
 [v _process_command process_command `(v  1 e 1 0 ]
-"242
+"328
 [v _main main `(v  1 e 1 0 ]
 "47 C:\Users\Professional\MPLABXProjects\mcc_generated_files/adc/src/adc.c
 [v _ADC_Initialize ADC_Initialize `(v  1 e 1 0 ]
@@ -163,7 +158,7 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 [v _T1GCONbits T1GCONbits `VES416  1 e 1 @25 ]
 "1220
 [v _TRISA TRISA `VEuc  1 e 1 @140 ]
-[s S690 . 1 `uc 1 TRISA0 1 0 :1:0 
+[s S669 . 1 `uc 1 TRISA0 1 0 :1:0 
 `uc 1 TRISA1 1 0 :1:1 
 `uc 1 TRISA2 1 0 :1:2 
 `uc 1 TRISA3 1 0 :1:3 
@@ -173,13 +168,13 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 `uc 1 TRISA7 1 0 :1:7 
 ]
 "1237
-[u S699 . 1 `S690 1 . 1 0 ]
-[v _TRISAbits TRISAbits `VES699  1 e 1 @140 ]
+[u S678 . 1 `S669 1 . 1 0 ]
+[v _TRISAbits TRISAbits `VES678  1 e 1 @140 ]
 "1282
 [v _TRISB TRISB `VEuc  1 e 1 @141 ]
 "1344
 [v _TRISC TRISC `VEuc  1 e 1 @142 ]
-[s S669 . 1 `uc 1 TRISC0 1 0 :1:0 
+[s S648 . 1 `uc 1 TRISC0 1 0 :1:0 
 `uc 1 TRISC1 1 0 :1:1 
 `uc 1 TRISC2 1 0 :1:2 
 `uc 1 TRISC3 1 0 :1:3 
@@ -189,8 +184,8 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 `uc 1 TRISC7 1 0 :1:7 
 ]
 "1361
-[u S678 . 1 `S669 1 . 1 0 ]
-[v _TRISCbits TRISCbits `VES678  1 e 1 @142 ]
+[u S657 . 1 `S648 1 . 1 0 ]
+[v _TRISCbits TRISCbits `VES657  1 e 1 @142 ]
 "1406
 [v _TRISE TRISE `VEuc  1 e 1 @144 ]
 [s S101 . 1 `uc 1 TMR1IE 1 0 :1:0 
@@ -232,12 +227,12 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 [v _ADRESH ADRESH `VEuc  1 e 1 @156 ]
 "2024
 [v _ADCON0 ADCON0 `VEuc  1 e 1 @157 ]
-[s S595 . 1 `uc 1 ADON 1 0 :1:0 
+[s S582 . 1 `uc 1 ADON 1 0 :1:0 
 `uc 1 GO_nDONE 1 0 :1:1 
 `uc 1 CHS 1 0 :5:2 
 ]
 "2053
-[s S599 . 1 `uc 1 . 1 0 :1:0 
+[s S586 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 ADGO 1 0 :1:1 
 `uc 1 CHS0 1 0 :1:2 
 `uc 1 CHS1 1 0 :1:3 
@@ -245,19 +240,19 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 `uc 1 CHS3 1 0 :1:5 
 `uc 1 CHS4 1 0 :1:6 
 ]
-[s S607 . 1 `uc 1 . 1 0 :1:0 
+[s S594 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 GO 1 0 :1:1 
 ]
-[s S610 . 1 `uc 1 . 1 0 :1:0 
+[s S597 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 nDONE 1 0 :1:1 
 ]
-[u S613 . 1 `S595 1 . 1 0 `S599 1 . 1 0 `S607 1 . 1 0 `S610 1 . 1 0 ]
-[v _ADCON0bits ADCON0bits `VES613  1 e 1 @157 ]
+[u S600 . 1 `S582 1 . 1 0 `S586 1 . 1 0 `S594 1 . 1 0 `S597 1 . 1 0 ]
+[v _ADCON0bits ADCON0bits `VES600  1 e 1 @157 ]
 "2113
 [v _ADCON1 ADCON1 `VEuc  1 e 1 @158 ]
 "2185
 [v _LATA LATA `VEuc  1 e 1 @268 ]
-[s S572 . 1 `uc 1 LATA0 1 0 :1:0 
+[s S553 . 1 `uc 1 LATA0 1 0 :1:0 
 `uc 1 LATA1 1 0 :1:1 
 `uc 1 LATA2 1 0 :1:2 
 `uc 1 LATA3 1 0 :1:3 
@@ -267,13 +262,13 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 `uc 1 LATA7 1 0 :1:7 
 ]
 "2202
-[u S581 . 1 `S572 1 . 1 0 ]
-[v _LATAbits LATAbits `VES581  1 e 1 @268 ]
+[u S562 . 1 `S553 1 . 1 0 ]
+[v _LATAbits LATAbits `VES562  1 e 1 @268 ]
 "2247
 [v _LATB LATB `VEuc  1 e 1 @269 ]
 "2309
 [v _LATC LATC `VEuc  1 e 1 @270 ]
-[s S545 . 1 `uc 1 LATC0 1 0 :1:0 
+[s S626 . 1 `uc 1 LATC0 1 0 :1:0 
 `uc 1 LATC1 1 0 :1:1 
 `uc 1 LATC2 1 0 :1:2 
 `uc 1 LATC3 1 0 :1:3 
@@ -283,8 +278,8 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 `uc 1 LATC7 1 0 :1:7 
 ]
 "2326
-[u S554 . 1 `S545 1 . 1 0 ]
-[v _LATCbits LATCbits `VES554  1 e 1 @270 ]
+[u S635 . 1 `S626 1 . 1 0 ]
+[v _LATCbits LATCbits `VES635  1 e 1 @270 ]
 "2371
 [v _LATE LATE `VEuc  1 e 1 @272 ]
 "2664
@@ -297,7 +292,7 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 [v _EEADRL EEADRL `VEuc  1 e 1 @401 ]
 "3239
 [v _EEDATL EEDATL `VEuc  1 e 1 @403 ]
-[s S503 . 1 `uc 1 RD 1 0 :1:0 
+[s S498 . 1 `uc 1 RD 1 0 :1:0 
 `uc 1 WR 1 0 :1:1 
 `uc 1 WREN 1 0 :1:2 
 `uc 1 WRERR 1 0 :1:3 
@@ -307,8 +302,8 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 `uc 1 EEPGD 1 0 :1:7 
 ]
 "3314
-[u S512 . 1 `S503 1 . 1 0 ]
-[v _EECON1bits EECON1bits `VES512  1 e 1 @405 ]
+[u S507 . 1 `S498 1 . 1 0 ]
+[v _EECON1bits EECON1bits `VES507  1 e 1 @405 ]
 "3359
 [v _EECON2 EECON2 `VEuc  1 e 1 @406 ]
 "3694
@@ -335,38 +330,38 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 ]
 [u S297 . 1 `S286 1 . 1 0 `S295 1 . 1 0 ]
 [v _IOCBFbits IOCBFbits `VES297  1 e 1 @918 ]
-"31 C:\Users\Professional\MPLABXProjects\main.c
-[v _rx_state rx_state `VEE2873  1 e 1 0 ]
-"32
+"75 C:\Users\Professional\MPLABXProjects\main.c
 [v _bit_count bit_count `VEuc  1 e 1 0 ]
-"33
+"76
 [v _rx_buffer rx_buffer `VEul  1 e 4 0 ]
-"34
-[v _cmd_ready cmd_ready `VEuc  1 e 1 0 ]
-"35
-[v _rx_mode rx_mode `VEuc  1 e 1 0 ]
-"36
-[v _rx_addr rx_addr `VEuc  1 e 1 0 ]
-"38
-[v _set_addr_state set_addr_state `VEE2879  1 e 1 0 ]
-"39
-[v _new_address new_address `VEuc  1 e 1 0 ]
-"40
-[v _my_address my_address `uc  1 e 1 0 ]
-"42
-[v _reset_counter reset_counter `uc  1 s 1 reset_counter ]
-"43
-[v _activate_counter activate_counter `uc  1 s 1 activate_counter ]
-"45
-[v _t2_received t2_received `VEuc  1 e 1 0 ]
-"46
-[v _response_phase response_phase `VEuc  1 e 1 0 ]
-"47
+"77
 [v _prev_ticks prev_ticks `VEus  1 e 2 0 ]
-"48
-[v _first_measure first_measure `VEuc  1 e 1 0 ]
-"49
-[v _zero_cnt zero_cnt `VEuc  1 e 1 0 ]
+"79
+[v _cmd_ready cmd_ready `VEuc  1 e 1 0 ]
+"80
+[v _rx_mode rx_mode `VEuc  1 e 1 0 ]
+"81
+[v _rx_addr rx_addr `VEuc  1 e 1 0 ]
+"83
+[v _in_response in_response `VEuc  1 e 1 0 ]
+"84
+[v _resp_armed resp_armed `VEuc  1 e 1 0 ]
+"85
+[v _resp_phase resp_phase `VEuc  1 e 1 0 ]
+"86
+[v _resp_request resp_request `VEuc  1 e 1 0 ]
+"87
+[v _resp_pull_us resp_pull_us `us  1 e 2 0 ]
+"91
+[v _set_addr_state set_addr_state `E2884  1 e 1 0 ]
+"92
+[v _new_address new_address `uc  1 e 1 0 ]
+"93
+[v _my_address my_address `uc  1 e 1 0 ]
+"94
+[v _reset_counter reset_counter `uc  1 e 1 0 ]
+"95
+[v _activate_counter activate_counter `uc  1 e 1 0 ]
 "45 C:\Users\Professional\MPLABXProjects\mcc_generated_files/adc/src/adc.c
 [v _ADC_ConversionDoneCallback ADC_ConversionDoneCallback `*.37(v  1 s 2 ADC_ConversionDoneCallback ]
 "38 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/interrupt.c
@@ -379,71 +374,71 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 [v _TMR1_OverflowCallback TMR1_OverflowCallback `*.37(v  1 s 2 TMR1_OverflowCallback ]
 "50
 [v _TMR1_GateCallback TMR1_GateCallback `*.37(v  1 s 2 TMR1_GateCallback ]
-"242 C:\Users\Professional\MPLABXProjects\main.c
+"328 C:\Users\Professional\MPLABXProjects\main.c
 [v _main main `(v  1 e 1 0 ]
 {
-"250
-[v main@i i `i  1 a 2 10 ]
-"288
+"339
+[v main@i i `uc  1 a 1 8 ]
+"370
+[v main@idle_loops idle_loops `us  1 a 2 6 ]
+"406
 } 0
-"158
+"218
 [v _send_response_phase send_response_phase `(v  1 e 1 0 ]
 {
-"160
-[v send_response_phase@pulse_us pulse_us `us  1 a 2 5 ]
-"159
-[v send_response_phase@adc_val adc_val `us  1 a 2 3 ]
-"167
-} 0
-"136
+[v send_response_phase@phase phase `uc  1 p 1 wreg ]
+[v send_response_phase@phase phase `uc  1 p 1 wreg ]
+[v send_response_phase@phase phase `uc  1 p 1 3 ]
+"225
+} 1
+"194
 [v _send_type_bits send_type_bits `(v  1 e 1 0 ]
 {
 [v send_type_bits@type type `uc  1 p 1 wreg ]
-"137
+"195
 [v send_type_bits@i i `uc  1 a 1 2 ]
-"136
+"194
 [v send_type_bits@type type `uc  1 p 1 wreg ]
 [v send_type_bits@type type `uc  1 p 1 1 ]
-"146
+"204
 } 1
-"128
+"186
 [v _send_pulse send_pulse `(v  1 e 1 0 ]
 {
 [v send_pulse@us us `us  1 p 2 0 ]
-"134
+"192
 } 0
-"148
-[v _read_adc_rb1 read_adc_rb1 `(us  1 e 2 0 ]
+"230
+[v _reset_sequencers reset_sequencers `(v  1 s 1 reset_sequencers ]
 {
-"156
+"234
 } 0
-"169
+"239
 [v _process_command process_command `(v  1 e 1 0 ]
 {
-"181
-[v process_command@i i `i  1 a 2 4 ]
-"209
-[v process_command@i_797 i `i  1 a 2 6 ]
-"172
-[v process_command@s s `E2879  1 s 1 s ]
-"240
+"323
 } 0
-"58
+"206
+[v _read_adc_rb1 read_adc_rb1 `(us  1 e 2 0 ]
+{
+"214
+} 0
+"107
 [v _eeprom_write eeprom_write `(v  1 e 1 0 ]
 {
 [v eeprom_write@addr addr `uc  1 p 1 wreg ]
 [v eeprom_write@addr addr `uc  1 p 1 wreg ]
 [v eeprom_write@data data `uc  1 p 1 0 ]
 [v eeprom_write@addr addr `uc  1 p 1 1 ]
-"69
+"118
 } 1
-"51
+"100
 [v _eeprom_read eeprom_read `(uc  1 e 1 0 ]
 {
 [v eeprom_read@addr addr `uc  1 p 1 wreg ]
 [v eeprom_read@addr addr `uc  1 p 1 wreg ]
 [v eeprom_read@addr addr `uc  1 p 1 0 ]
-"56
+"105
 } 1
 "39 C:\Users\Professional\MPLABXProjects\mcc_generated_files/system/src/system.c
 [v _SYSTEM_Initialize SYSTEM_Initialize `(v  1 e 1 0 ]
@@ -507,18 +502,20 @@ ADC_TRIGGER_SOURCE_DISABLED 0
 {
 "139
 } 0
-"71 C:\Users\Professional\MPLABXProjects\main.c
+"124 C:\Users\Professional\MPLABXProjects\main.c
 [v _protocol_on_bus_change protocol_on_bus_change `(v  1 e 1 0 ]
 {
-"72
-[v protocol_on_bus_change@cur cur `us  1 a 2 9 ]
-"83
-[v protocol_on_bus_change@us us `us  1 a 2 7 ]
-"73
-[v protocol_on_bus_change@delta delta `us  1 a 2 4 ]
-"96
-[v protocol_on_bus_change@bit bit `uc  1 a 1 6 ]
-"126
+"167
+[v protocol_on_bus_change@bit bit `uc  1 a 1 5 ]
+"135
+[v protocol_on_bus_change@delta delta `us  1 a 2 10 ]
+"131
+[v protocol_on_bus_change@cur cur `us  1 a 2 7 ]
+"128
+[v protocol_on_bus_change@hi hi `uc  1 a 1 9 ]
+"129
+[v protocol_on_bus_change@lo lo `uc  1 a 1 6 ]
+"176
 } 0
 "158 C:\Users\Professional\MPLABXProjects\mcc_generated_files/adc/src/adc.c
 [v _ADC_ISR ADC_ISR `(v  1 e 1 0 ]

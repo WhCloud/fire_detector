@@ -7,11 +7,7 @@
 # 1 "C:\\Program Files\\Microchip\\xc8\\v3.10\\pic\\include/language_support.h" 1 3
 # 2 "<built-in>" 2
 # 1 "main.c" 2
-
-
-
-
-
+# 38 "main.c"
 # 1 "./mcc_generated_files/system/system.h" 1
 # 39 "./mcc_generated_files/system/system.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v3.10\\pic\\include/xc.h" 1 3
@@ -5275,41 +5271,32 @@ void TMR1_Tasks(void);
 
 
 void SYSTEM_Initialize(void);
-# 7 "main.c" 2
-# 17 "main.c"
-typedef enum {
-    IDLE,
-    RECEIVING_BITS,
-    WAIT_T2,
-    CMD_READY
-} rx_state_t;
-
-typedef enum {
-    AWAIT_FIRST,
-    AWAIT_SECOND,
-    AWAIT_ADDR1,
-    AWAIT_ADDR2
-} set_addr_state_t;
-
-volatile rx_state_t rx_state = IDLE;
-volatile uint8_t bit_count = 0;
+# 39 "main.c" 2
+# 75 "main.c"
+volatile uint8_t bit_count = 12;
 volatile uint32_t rx_buffer = 0;
+volatile uint16_t prev_ticks = 0;
+
 volatile uint8_t cmd_ready = 0;
 volatile uint8_t rx_mode = 0;
 volatile uint8_t rx_addr = 0;
 
-volatile set_addr_state_t set_addr_state = AWAIT_FIRST;
-volatile uint8_t new_address = 0;
+volatile uint8_t in_response = 0;
+volatile uint8_t resp_armed = 0;
+volatile uint8_t resp_phase = 0;
+volatile uint8_t resp_request= 0;
+uint16_t resp_pull_us = 800;
+
+
+typedef enum { AWAIT_FIRST, AWAIT_SECOND, AWAIT_ADDR1, AWAIT_ADDR2 } set_addr_state_t;
+set_addr_state_t set_addr_state = AWAIT_FIRST;
+uint8_t new_address = 0;
 uint8_t my_address = 0x01;
+uint8_t reset_counter = 0;
+uint8_t activate_counter = 0;
 
-static uint8_t reset_counter = 0;
-static uint8_t activate_counter = 0;
 
-volatile uint8_t t2_received = 0;
-volatile uint8_t response_phase = 0;
-volatile uint16_t prev_ticks = 0;
-volatile uint8_t first_measure = 1;
-volatile uint8_t zero_cnt = 0;
+
 
 uint8_t eeprom_read(uint8_t addr) {
     EEADRL = addr;
@@ -5331,63 +5318,64 @@ void eeprom_write(uint8_t addr, uint8_t data) {
     EECON1bits.WREN = 0;
 }
 
+
+
+
+
 void protocol_on_bus_change(void) {
-    uint16_t cur = TMR1;
-    uint16_t delta;
-    if (first_measure) {
-        first_measure = 0;
-        prev_ticks = cur;
-        return;
-    }
-    if (cur >= prev_ticks)
-        delta = cur - prev_ticks;
-    else
-        delta = (65535 - prev_ticks) + cur;
-    uint16_t us = delta / 4;
+
+
+
+    uint8_t hi = TMR1H;
+    uint8_t lo = TMR1L;
+    if (TMR1H != hi) { hi = TMR1H; lo = TMR1L; }
+    uint16_t cur = ((uint16_t)hi << 8) | lo;
+
+    PIR1bits.TMR1IF = 0;
+
+    uint16_t delta = (uint16_t)(cur - prev_ticks);
     prev_ticks = cur;
 
-    do { LATCbits.LATC6 = 1; } while(0); _delay((unsigned long)((30)*(16000000/4000000.0))); do { LATCbits.LATC6 = 0; } while(0);
 
-    if (rx_state == WAIT_T2) {
-        if (us >= 100 && us <= 160) {
-            t2_received = 1;
-            do { LATCbits.LATC6 = 1; } while(0); _delay((unsigned long)((50)*(16000000/4000000.0))); do { LATCbits.LATC6 = 0; } while(0);
+
+
+
+
+
+    if (delta >= ((uint16_t)((uint32_t)(4000) / 2u))) {
+        bit_count = 0;
+        rx_buffer = 0;
+        in_response = 0;
+        resp_armed = 0;
+        resp_phase = 0;
+        return;
+    }
+
+
+    if (in_response) {
+        if (!resp_armed) {
+
+
+            if (delta >= ((uint16_t)((uint32_t)(400) / 2u))) resp_armed = 1;
+        } else if (delta >= ((uint16_t)((uint32_t)(100) / 2u)) && delta <= ((uint16_t)((uint32_t)(200) / 2u))) {
+            resp_request = 1;
         }
         return;
     }
 
-    uint8_t bit = (us < 450) ? 0 : 1;
 
-    if (rx_state == IDLE) {
-        if (bit == 0) {
-            zero_cnt++;
-            if (zero_cnt == 4) {
-                rx_state = RECEIVING_BITS;
-                rx_buffer = 0;
-                rx_buffer |= (uint32_t)0 << 0;
-                rx_buffer |= (uint32_t)0 << 1;
-                rx_buffer |= (uint32_t)0 << 2;
-                rx_buffer |= (uint32_t)0 << 3;
-                bit_count = 4;
-                zero_cnt = 0;
-                do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((200)*(16000000/4000000.0))); do { LATCbits.LATC5 = 0; } while(0);
-            }
-        } else {
-            zero_cnt = 0;
-        }
-    } else if (rx_state == RECEIVING_BITS) {
+    if (bit_count < 12) {
+        uint8_t bit = (delta >= ((uint16_t)((uint32_t)(450) / 2u))) ? 1u : 0u;
         rx_buffer |= (uint32_t)bit << bit_count;
         bit_count++;
         if (bit_count == 12) {
-            rx_state = CMD_READY;
-            rx_mode = rx_buffer & 0x0F;
-            rx_addr = (rx_buffer >> 4) & 0xFF;
+            rx_mode = (uint8_t)(rx_buffer & 0x0F);
+            rx_addr = (uint8_t)((rx_buffer >> 4) & 0xFF);
             cmd_ready = 1;
-            do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((500)*(16000000/4000000.0))); do { LATCbits.LATC5 = 0; } while(0);
         }
     }
 }
-
+# 186 "main.c"
 void send_pulse(uint16_t us) {
     do { LATAbits.LATA3 = 1; } while(0);
     if (us == 800) _delay((unsigned long)((800)*(16000000/4000000.0)));
@@ -5411,113 +5399,149 @@ void send_type_bits(uint8_t type) {
 uint16_t read_adc_rb1(void) {
     ADCON1 = 0x80;
     ADCON0 = 0x01;
-    ADCON0bits.CHS = 4;
+    ADCON0bits.CHS = 0;
     _delay((unsigned long)((10)*(16000000/4000000.0)));
     ADCON0bits.GO = 1;
     while (ADCON0bits.GO);
     return ((uint16_t)ADRESH << 8) | ADRESL;
 }
 
-void send_response_phase(void) {
-    uint16_t adc_val = read_adc_rb1();
-    uint16_t pulse_us = (adc_val < 20) ? 800 : 1800;
-    switch (response_phase) {
-        case 0: send_pulse(pulse_us); break;
-        case 1: send_type_bits(0x06); break;
-        case 2: send_pulse(pulse_us); break;
+
+
+void send_response_phase(uint8_t phase) {
+    switch (phase) {
+        case 0: send_pulse(resp_pull_us); break;
+        case 1: send_type_bits(0x04); break;
+        case 2: send_pulse(resp_pull_us); break;
+        default: break;
     }
-    do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((100)*(16000000/4000000.0))); do { LATCbits.LATC5 = 0; } while(0);
 }
+
+
+
+
+static void reset_sequencers(void) {
+    set_addr_state = AWAIT_FIRST;
+    reset_counter = 0;
+    activate_counter = 0;
+}
+
+
+
 
 void process_command(void) {
 
-    if (rx_mode == 1 || rx_mode == 8) {
-        static set_addr_state_t s = AWAIT_FIRST;
-        if (s == AWAIT_FIRST && rx_addr == 0x55) s = AWAIT_SECOND;
-        else if (s == AWAIT_SECOND && rx_addr == 0x3A) s = AWAIT_ADDR1;
-        else if (s == AWAIT_ADDR1) { new_address = rx_addr; s = AWAIT_ADDR2; }
-        else if (s == AWAIT_ADDR2 && rx_addr == new_address) {
-            eeprom_write(0, new_address);
-            my_address = new_address;
-            s = AWAIT_FIRST;
 
-            for (int i = 0; i < 2; i++) {
-                do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((100)*(16000000/4000.0)));
-                do { LATCbits.LATC5 = 0; } while(0); _delay((unsigned long)((100)*(16000000/4000.0)));
-            }
+    if (rx_mode == 1) {
+        switch (set_addr_state) {
+            case AWAIT_FIRST:
+                set_addr_state = (rx_addr == 0x55) ? AWAIT_SECOND : AWAIT_FIRST;
+                break;
+            case AWAIT_SECOND:
+                set_addr_state = (rx_addr == 0x3A) ? AWAIT_ADDR1 : AWAIT_FIRST;
+                break;
+            case AWAIT_ADDR1:
+                new_address = rx_addr;
+                set_addr_state = AWAIT_ADDR2;
+                break;
+            case AWAIT_ADDR2:
+                if (rx_addr == new_address) {
+                    eeprom_write(0, new_address);
+                    my_address = new_address;
 
 
-            rx_state = IDLE;
-            cmd_ready = 0;
-            t2_received = 0;
-            response_phase = 0;
-            zero_cnt = 0;
-            bit_count = 0;
-            first_measure = 1;
-            prev_ticks = TMR1;
-            T1CONbits.TMR1ON = 1;
-            PIR1bits.TMR1IF = 0;
-            rx_buffer = 0;
 
-            _delay((unsigned long)((10)*(16000000/4000.0)));
 
-        } else {
-            s = AWAIT_FIRST;
+
+
+                }
+                set_addr_state = AWAIT_FIRST;
+                break;
         }
         return;
     }
 
 
-    if (rx_mode == 5 || rx_mode == 6 || rx_mode == 7) {
-        for (int i = 0; i < 10; i++) {
-            do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((250)*(16000000/4000.0)));
-            do { LATCbits.LATC5 = 0; } while(0); _delay((unsigned long)((250)*(16000000/4000.0)));
-        }
+    set_addr_state = AWAIT_FIRST;
+
+
+    if (rx_addr != my_address) {
+
+
+        reset_counter = 0;
+        activate_counter = 0;
         return;
     }
-
-    if (rx_addr != my_address) return;
 
     switch (rx_mode) {
         case 0:
         case 4:
-            rx_state = WAIT_T2;
-            response_phase = 0;
-            t2_received = 0;
-            do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((200)*(16000000/4000000.0))); do { LATCbits.LATC5 = 0; } while(0);
+            in_response = 1;
+            resp_armed = 0;
+            resp_phase = 0;
+            resp_request= 0;
+            resp_pull_us = (read_adc_rb1() < 20) ? 1800 : 800;
+            reset_counter = 0;
+            activate_counter = 0;
             break;
+
         case 2:
-            reset_counter++;
-            if (reset_counter >= 4) { reset_counter = 0; __asm("reset"); }
+            activate_counter = 0;
+            if (++reset_counter >= 4) { reset_counter = 0; __asm("reset"); }
             break;
+
         case 3:
-            activate_counter++;
-            if (activate_counter >= 4) {
+            reset_counter = 0;
+            if (++activate_counter >= 4) {
                 activate_counter = 0;
                 do { LATCbits.LATC7 = 1; } while(0);
                 do { LATCbits.LATC6 = 1; } while(0);
             }
             break;
-        default: break;
+
+        case 5:
+        case 6:
+        case 7:
+            reset_counter = 0;
+            activate_counter = 0;
+
+            do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((60)*(16000000/4000.0))); do { LATCbits.LATC5 = 0; } while(0);
+            break;
+
+        default:
+            reset_counter = 0;
+            activate_counter = 0;
+            break;
     }
 }
 
+
+
+
 void main(void) {
     SYSTEM_Initialize();
+
     do { TRISCbits.TRISC5 = 0; } while(0);
     do { TRISCbits.TRISC6 = 0; } while(0);
+    do { TRISCbits.TRISC4 = 0; } while(0);
     do { TRISCbits.TRISC7 = 0; } while(0);
     do { TRISAbits.TRISA3 = 0; } while(0);
     do { LATAbits.LATA3 = 0; } while(0);
 
-    for (int i = 0; i < 3; i++) {
-        do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((200)*(16000000/4000.0)));
-        do { LATCbits.LATC5 = 0; } while(0); _delay((unsigned long)((200)*(16000000/4000.0)));
+
+    for (uint8_t i = 0; i < 3; i++) {
+        do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((150)*(16000000/4000.0)));
+        do { LATCbits.LATC5 = 0; } while(0); _delay((unsigned long)((150)*(16000000/4000.0)));
     }
+
+
+
+
 
     T1CON = 0;
     T1CONbits.TMR1CS = 0;
-    T1CONbits.T1CKPS = 0;
+    T1CONbits.T1CKPS = 3;
+    T1CONbits.nT1SYNC = 1;
     TMR1 = 0;
     PIE1bits.TMR1IE = 0;
     T1CONbits.TMR1ON = 1;
@@ -5525,27 +5549,51 @@ void main(void) {
     my_address = eeprom_read(0);
     if (my_address == 0xFF || my_address == 0) my_address = 0x01;
 
+
+    prev_ticks = TMR1;
+    PIR1bits.TMR1IF = 0;
+    bit_count = 12;
+
     DATA_IN_SetInterruptHandler(protocol_on_bus_change);
-    INTCONbits.GIE = 1;
     INTCONbits.PEIE = 1;
+    INTCONbits.GIE = 1;
 
     do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((100)*(16000000/4000.0))); do { LATCbits.LATC5 = 0; } while(0);
+
+    uint16_t idle_loops = 0;
 
     while (1) {
         if (cmd_ready) {
             cmd_ready = 0;
             process_command();
+            idle_loops = 0;
+        } else if (++idle_loops >= 3000) {
+            idle_loops = 0;
+            reset_sequencers();
         }
-        if (rx_state == WAIT_T2 && t2_received) {
-            t2_received = 0;
-            send_response_phase();
-            response_phase++;
-            if (response_phase >= 3) {
-                rx_state = IDLE;
-                response_phase = 0;
-                zero_cnt = 0;
+
+
+
+        if (in_response && resp_request) {
+            resp_request = 0;
+
+
+
+
+            IOCBP = 0x0;
+            IOCBN = 0x0;
+            send_response_phase(resp_phase);
+            IOCBF = 0x0;
+            IOCBP = 0x1;
+            IOCBN = 0x1;
+
+            if (++resp_phase >= 3) {
+                in_response = 0;
+                resp_armed = 0;
+                resp_phase = 0;
             }
         }
-        _delay((unsigned long)((100)*(16000000/4000000.0)));
+
+        if (!in_response) _delay((unsigned long)((100)*(16000000/4000000.0)));
     }
 }
