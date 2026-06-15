@@ -189,7 +189,10 @@ void protocol_on_bus_change(void) {
 void send_pulse(uint16_t us) {
     DATA_OUT_SetHigh();
     if (0 != us) {
-        __delay_us(us);
+        uint16_t cyclesToWait = (us + 9) / 10;
+        while (cyclesToWait--) {
+            __delay_us(10);
+        }
     }
     DATA_OUT_SetLow();
 }
