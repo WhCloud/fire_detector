@@ -293,7 +293,7 @@ static void apply_mode_select(void) {
                 Y_LED_SetHigh();
             }
             break;
-        case 3: 
+        case 3: {
                 LOAD_SetHigh();
                 Y_LED_SetHigh();
             }
