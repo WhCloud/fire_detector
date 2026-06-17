@@ -5049,7 +5049,7 @@ typedef enum
     ADC_CHANNEL_TEMP = 0x1d,
     ADC_CHANNEL_DAC = 0x1e,
     ADC_CHANNEL_FVR = 0x1f,
-    ADC_CHANNEL_ANA0 = undefined,
+    ADC_CHANNEL_ANA0 = 0x0,
     ADC_CHANNEL_AN0 = 0x0
 } adc_channel_t;
 
@@ -5527,6 +5527,7 @@ void process_command(void) {
                 resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
                 do { LATCbits.LATC4 = 0; } while(0);
             }
+
             reset_counter = 0;
             activate_counter = 0;
             break;

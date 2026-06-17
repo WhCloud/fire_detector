@@ -349,7 +349,8 @@ void process_command(void) {
             } else {
                 resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
                 R_LED_SetLow();
-            }
+            } 
+            // resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
             reset_counter    = 0;
             activate_counter = 0;
             break;
