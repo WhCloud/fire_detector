@@ -341,11 +341,14 @@ void process_command(void) {
             resp_phase  = 0;
             resp_request= 0;
             /* Пины 3 (RA1) или 4 (RA2) в логическом 0 -> игнор АЦП, шлём ошибку:
-             * нулевой импульс smoke/heat (Type не трогаем). */
+             * нулевой импульс smoke/heat (Type не трогаем). Красный LED (RC4) —
+             * отладочный индикатор ошибки: вкл при ошибке, выкл когда пропала. */
             if ((ENABLE_PIN3_GetValue() == 0) || (ENABLE_PIN4_GetValue() == 0)) {
                 resp_pull_us = 0;
+                R_LED_SetHigh();
             } else {
                 resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
+                R_LED_SetLow();
             }
             reset_counter    = 0;
             activate_counter = 0;
