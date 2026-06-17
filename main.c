@@ -48,6 +48,15 @@
 #define ADC_VALUE_HIGH 1000
 #define ADC_VALUE_LOW 300
 
+/* Цифровые входы расширения (PIC16F1936, 28 pin):
+ *  Пины 3 (RA1) и 4 (RA2) — «разрешение»: если хотя бы один = 0, игнор АЦП и шлём
+ *    ошибку (нулевой импульс smoke/heat). ANSEL для них сбрасывается в main()
+ *    (MCC ставит RA1/RA2 аналоговыми) — иначе цифровое чтение вернёт всегда 0.
+ *  Пины 24 (RB3=MODE1) и 26 (RB5=MODE2) — 2-битный селектор режима:
+ *    бит1 = пин 24 (RB3), бит0 = пин 26 (RB5); уже цифровые входы. */
+#define ENABLE_PIN3_GetValue()  PORTAbits.RA1
+#define ENABLE_PIN4_GetValue()  PORTAbits.RA2
+
 /* TMR1 = Fosc/4 (4 МГц) с прескалером 1:8 => 0.5 МГц => 2 мкс на тик.
  * Прескалер 1:8 КРИТИЧЕН: переполнение раз в 131 мс (65536*2 мкс) — заметно
  * длиннее и кадра (~13 мс), и межкадровой паузы (~16 мс). При 1:1 переполнение
@@ -263,6 +272,20 @@ static uint16_t convert_adc_to_pulse_usec(uint16_t adc_val) {
     return _pulse_width;
 }
 
+/* Селектор режима на пинах 24 (RB3=MODE1, бит1) и 26 (RB5=MODE2, бит0).
+ * 4 состояния (0..3). Заготовка: действий пока нет — заполнять по мере надобности
+ * (напр. мигание светодиодом). Пины уже цифровые входы (ANSELB бит3/5 = 0). */
+static void apply_mode_select(void) {
+    uint8_t sel = (uint8_t)((MODE1_GetValue() << 1) | MODE2_GetValue());
+    switch (sel) {
+        case 0:  /* TODO: состояние 0 */ break;
+        case 1:  /* TODO: состояние 1 */ break;
+        case 2:  /* TODO: состояние 2 */ break;
+        case 3:  /* TODO: состояние 3 */ break;
+        default: break;
+    }
+}
+
 /* =========================================================================
  *  Обработка принятой команды (вызывается из main)
  * ========================================================================= */
@@ -317,7 +340,13 @@ void process_command(void) {
             resp_armed  = 0;
             resp_phase  = 0;
             resp_request= 0;
-            resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
+            /* Пины 3 (RA1) или 4 (RA2) в логическом 0 -> игнор АЦП, шлём ошибку:
+             * нулевой импульс smoke/heat (Type не трогаем). */
+            if ((ENABLE_PIN3_GetValue() == 0) || (ENABLE_PIN4_GetValue() == 0)) {
+                resp_pull_us = 0;
+            } else {
+                resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
+            }
             reset_counter    = 0;
             activate_counter = 0;
             break;
@@ -364,6 +393,12 @@ void main(void) {
     LOAD_SetDigitalOutput();
     DATA_OUT_SetDigitalOutput();
     DATA_OUT_SetLow();
+
+    /* Пины 3 (RA1) и 4 (RA2): MCC ставит их аналоговыми (ANSELA=0x37) — для чтения
+     * ЛОГИЧЕСКОГО уровня переводим в цифровой режим. TRISA уже вход (0xF7). АЦП
+     * читает только AN0/RA0, эти каналы не нужны. */
+    ANSELAbits.ANSA1 = 0;
+    ANSELAbits.ANSA2 = 0;
 
     /* стартовая индикация */
     for (uint8_t i = 0; i < 3; i++) {
@@ -431,6 +466,9 @@ void main(void) {
             }
         }
 
-        if (!in_response) __delay_us(100);   /* в ответе — минимум задержки метка->импульс */
+        if (!in_response) {
+            apply_mode_select();             /* опрос селектора режима, пины 24/26 (заготовка) */
+            __delay_us(100);                 /* в ответе — минимум задержки метка->импульс */
+        }
     }
 }
