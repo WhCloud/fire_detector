@@ -61,11 +61,11 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 5922: extern volatile unsigned char IOCBF __attribute__((address(0x396)));
 [v _IOCBF `Vuc ~T0 @X0 0 e@918 ]
 [v F2794 `(v ~T0 @X0 0 tf ]
-"294 mcc_generated_files/system/src/../pins.h
-[; ;mcc_generated_files/system/src/../pins.h: 294: void DATA_IN_SetInterruptHandler(void (* InterruptHandler)(void));
+"332 mcc_generated_files/system/src/../pins.h
+[; ;mcc_generated_files/system/src/../pins.h: 332: void DATA_IN_SetInterruptHandler(void (* InterruptHandler)(void));
 [v _DATA_IN_SetInterruptHandler `(v ~T0 @X0 0 ef1`*F2794 ]
-"316
-[; ;mcc_generated_files/system/src/../pins.h: 316: void DATA_IN_DefaultInterruptHandler(void);
+"354
+[; ;mcc_generated_files/system/src/../pins.h: 354: void DATA_IN_DefaultInterruptHandler(void);
 [v _DATA_IN_DefaultInterruptHandler `(v ~T0 @X0 0 ef ]
 "355 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 355:     struct {
@@ -97,8 +97,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 "5942
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 5942: extern volatile IOCBFbits_t IOCBFbits __attribute__((address(0x396)));
 [v _IOCBFbits `VS295 ~T0 @X0 0 e@918 ]
-"284 mcc_generated_files/system/src/../pins.h
-[; ;mcc_generated_files/system/src/../pins.h: 284: void DATA_IN_ISR(void);
+"322 mcc_generated_files/system/src/../pins.h
+[; ;mcc_generated_files/system/src/../pins.h: 322: void DATA_IN_ISR(void);
 [v _DATA_IN_ISR `(v ~T0 @X0 0 ef ]
 [v F2806 `(v ~T0 @X0 0 tf ]
 [v F2808 `(v ~T0 @X0 0 tf ]
@@ -634,8 +634,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;mcc_generated_files/system/src/pins.c: 55:     TRISE = 0x8;
 [e = _TRISE -> -> 8 `i `uc ]
 "60
-[; ;mcc_generated_files/system/src/pins.c: 60:     ANSELA = 0x37;
-[e = _ANSELA -> -> 55 `i `uc ]
+[; ;mcc_generated_files/system/src/pins.c: 60:     ANSELA = 0x31;
+[e = _ANSELA -> -> 49 `i `uc ]
 "61
 [; ;mcc_generated_files/system/src/pins.c: 61:     ANSELB = 0x16;
 [e = _ANSELB -> -> 22 `i `uc ]

@@ -4998,7 +4998,7 @@ void CLOCK_Initialize(void);
 # 40 "mcc_generated_files/system/src/../config_bits.h" 2
 # 43 "mcc_generated_files/system/src/../system.h" 2
 # 1 "mcc_generated_files/system/src/../../system/pins.h" 1
-# 268 "mcc_generated_files/system/src/../../system/pins.h"
+# 306 "mcc_generated_files/system/src/../../system/pins.h"
 void PIN_MANAGER_Initialize (void);
 
 
@@ -5016,11 +5016,11 @@ void PIN_MANAGER_IOC(void);
 
 
 void DATA_IN_ISR(void);
-# 294 "mcc_generated_files/system/src/../../system/pins.h"
+# 332 "mcc_generated_files/system/src/../../system/pins.h"
 void DATA_IN_SetInterruptHandler(void (* InterruptHandler)(void));
-# 305 "mcc_generated_files/system/src/../../system/pins.h"
+# 343 "mcc_generated_files/system/src/../../system/pins.h"
 extern void (*DATA_IN_InterruptHandler)(void);
-# 316 "mcc_generated_files/system/src/../../system/pins.h"
+# 354 "mcc_generated_files/system/src/../../system/pins.h"
 void DATA_IN_DefaultInterruptHandler(void);
 # 44 "mcc_generated_files/system/src/../system.h" 2
 # 1 "mcc_generated_files/system/src/../../system/interrupt.h" 1
@@ -5049,6 +5049,7 @@ typedef enum
     ADC_CHANNEL_TEMP = 0x1d,
     ADC_CHANNEL_DAC = 0x1e,
     ADC_CHANNEL_FVR = 0x1f,
+    ADC_CHANNEL_ANA0 = undefined,
     ADC_CHANNEL_AN0 = 0x0
 } adc_channel_t;
 
@@ -5062,7 +5063,7 @@ typedef enum
     ADC_TRIGGER_SOURCE_DISABLED = 0x0
 } adc_trigger_source_t ;
 # 42 "mcc_generated_files/system/src/../../adc/adc.h" 2
-# 59 "mcc_generated_files/system/src/../../adc/adc.h"
+# 65 "mcc_generated_files/system/src/../../adc/adc.h"
 void ADC_Initialize(void);
 
 
@@ -5096,9 +5097,9 @@ void ADC_Disable(void);
 
 
 void ADC_ChannelSelect(adc_channel_t channel);
-# 101 "mcc_generated_files/system/src/../../adc/adc.h"
+# 107 "mcc_generated_files/system/src/../../adc/adc.h"
 void ADC_ConversionStart(void);
-# 111 "mcc_generated_files/system/src/../../adc/adc.h"
+# 117 "mcc_generated_files/system/src/../../adc/adc.h"
 _Bool ADC_IsConversionDone(void);
 
 
@@ -5108,7 +5109,7 @@ _Bool ADC_IsConversionDone(void);
 
 
 void ADC_ConversionStop(void);
-# 128 "mcc_generated_files/system/src/../../adc/adc.h"
+# 134 "mcc_generated_files/system/src/../../adc/adc.h"
 adc_result_t ADC_ConversionResultGet(void);
 
 
@@ -5142,7 +5143,7 @@ uint8_t ADC_ResolutionGet(void);
 
 
 void ADC_ConversionDoneInterruptFlagClear(void);
-# 169 "mcc_generated_files/system/src/../../adc/adc.h"
+# 175 "mcc_generated_files/system/src/../../adc/adc.h"
 _Bool ADC_IsConversionDoneInterruptFlagSet(void);
 
 

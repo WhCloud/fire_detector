@@ -4998,7 +4998,7 @@ void CLOCK_Initialize(void);
 # 40 "./mcc_generated_files/system/config_bits.h" 2
 # 43 "./mcc_generated_files/system/system.h" 2
 # 1 "./mcc_generated_files/system/../system/pins.h" 1
-# 268 "./mcc_generated_files/system/../system/pins.h"
+# 306 "./mcc_generated_files/system/../system/pins.h"
 void PIN_MANAGER_Initialize (void);
 
 
@@ -5016,11 +5016,11 @@ void PIN_MANAGER_IOC(void);
 
 
 void DATA_IN_ISR(void);
-# 294 "./mcc_generated_files/system/../system/pins.h"
+# 332 "./mcc_generated_files/system/../system/pins.h"
 void DATA_IN_SetInterruptHandler(void (* InterruptHandler)(void));
-# 305 "./mcc_generated_files/system/../system/pins.h"
+# 343 "./mcc_generated_files/system/../system/pins.h"
 extern void (*DATA_IN_InterruptHandler)(void);
-# 316 "./mcc_generated_files/system/../system/pins.h"
+# 354 "./mcc_generated_files/system/../system/pins.h"
 void DATA_IN_DefaultInterruptHandler(void);
 # 44 "./mcc_generated_files/system/system.h" 2
 # 1 "./mcc_generated_files/system/../system/interrupt.h" 1
@@ -5049,6 +5049,7 @@ typedef enum
     ADC_CHANNEL_TEMP = 0x1d,
     ADC_CHANNEL_DAC = 0x1e,
     ADC_CHANNEL_FVR = 0x1f,
+    ADC_CHANNEL_ANA0 = undefined,
     ADC_CHANNEL_AN0 = 0x0
 } adc_channel_t;
 
@@ -5062,7 +5063,7 @@ typedef enum
     ADC_TRIGGER_SOURCE_DISABLED = 0x0
 } adc_trigger_source_t ;
 # 42 "./mcc_generated_files/system/../adc/adc.h" 2
-# 59 "./mcc_generated_files/system/../adc/adc.h"
+# 65 "./mcc_generated_files/system/../adc/adc.h"
 void ADC_Initialize(void);
 
 
@@ -5096,9 +5097,9 @@ void ADC_Disable(void);
 
 
 void ADC_ChannelSelect(adc_channel_t channel);
-# 101 "./mcc_generated_files/system/../adc/adc.h"
+# 107 "./mcc_generated_files/system/../adc/adc.h"
 void ADC_ConversionStart(void);
-# 111 "./mcc_generated_files/system/../adc/adc.h"
+# 117 "./mcc_generated_files/system/../adc/adc.h"
 _Bool ADC_IsConversionDone(void);
 
 
@@ -5108,7 +5109,7 @@ _Bool ADC_IsConversionDone(void);
 
 
 void ADC_ConversionStop(void);
-# 128 "./mcc_generated_files/system/../adc/adc.h"
+# 134 "./mcc_generated_files/system/../adc/adc.h"
 adc_result_t ADC_ConversionResultGet(void);
 
 
@@ -5142,7 +5143,7 @@ uint8_t ADC_ResolutionGet(void);
 
 
 void ADC_ConversionDoneInterruptFlagClear(void);
-# 169 "./mcc_generated_files/system/../adc/adc.h"
+# 175 "./mcc_generated_files/system/../adc/adc.h"
 _Bool ADC_IsConversionDoneInterruptFlagSet(void);
 
 
@@ -5272,7 +5273,7 @@ void TMR1_Tasks(void);
 
 void SYSTEM_Initialize(void);
 # 39 "main.c" 2
-# 75 "main.c"
+# 87 "main.c"
 volatile uint8_t bit_count = 12;
 volatile uint32_t rx_buffer = 0;
 volatile uint16_t prev_ticks = 0;
@@ -5285,7 +5286,7 @@ volatile uint8_t in_response = 0;
 volatile uint8_t resp_armed = 0;
 volatile uint8_t resp_phase = 0;
 volatile uint8_t resp_request= 0;
-uint16_t resp_pull_us = 800;
+uint16_t resp_pull_us = 600;
 
 
 typedef enum { AWAIT_FIRST, AWAIT_SECOND, AWAIT_ADDR1, AWAIT_ADDR2 } set_addr_state_t;
@@ -5321,15 +5322,19 @@ void eeprom_write(uint8_t addr, uint8_t data) {
 
 
 
-
-void protocol_on_bus_change(void) {
-
-
-
+static uint16_t tmr1_ticks(void) {
     uint8_t hi = TMR1H;
     uint8_t lo = TMR1L;
     if (TMR1H != hi) { hi = TMR1H; lo = TMR1L; }
-    uint16_t cur = ((uint16_t)hi << 8) | lo;
+    return ((uint16_t)hi << 8) | lo;
+}
+
+
+
+
+
+void protocol_on_bus_change(void) {
+    uint16_t cur = tmr1_ticks();
 
     PIR1bits.TMR1IF = 0;
 
@@ -5375,13 +5380,17 @@ void protocol_on_bus_change(void) {
         }
     }
 }
-# 186 "main.c"
+# 207 "main.c"
 void send_pulse(uint16_t us) {
-    do { LATAbits.LATA3 = 1; } while(0);
-    if (us == 800) _delay((unsigned long)((800)*(16000000/4000000.0)));
-    else if (us == 1800) _delay((unsigned long)((1800)*(16000000/4000000.0)));
-    else _delay((unsigned long)((1000)*(16000000/4000000.0)));
-    do { LATAbits.LATA3 = 0; } while(0);
+    if (us > 0) {
+        uint16_t ticks = ((uint16_t)((uint32_t)(us) / 2u));
+        do { LATAbits.LATA3 = 1; } while(0);
+        uint16_t t0 = tmr1_ticks();
+        while ((uint16_t)(tmr1_ticks() - t0) < ticks) { }
+        do { LATAbits.LATA3 = 0; } while(0);
+    } else {
+
+    }
 }
 
 void send_type_bits(uint8_t type) {
@@ -5397,7 +5406,7 @@ void send_type_bits(uint8_t type) {
 }
 
 uint16_t read_adc_rb1(void) {
-    ADCON1 = 0x80;
+    ADCON1 = 0xA0;
     ADCON0 = 0x01;
     ADCON0bits.CHS = 0;
     _delay((unsigned long)((10)*(16000000/4000000.0)));
@@ -5424,6 +5433,34 @@ static void reset_sequencers(void) {
     set_addr_state = AWAIT_FIRST;
     reset_counter = 0;
     activate_counter = 0;
+}
+
+static uint16_t convert_adc_to_pulse_usec(uint16_t adc_val) {
+    uint16_t _pulse_width = 0;
+
+
+
+
+    uint16_t adc_val_mvolts = (uint16_t)(((uint32_t)5000 * adc_val + 512u) / 1024u);
+    if ((adc_val_mvolts >= 300) && (adc_val_mvolts <= 1000)) {
+        _pulse_width = (2000 + 600) - 2 * adc_val_mvolts;
+    }
+
+    return _pulse_width;
+}
+
+
+
+
+static void apply_mode_select(void) {
+    uint8_t sel = (uint8_t)((PORTBbits.RB3 << 1) | PORTBbits.RB5);
+    switch (sel) {
+        case 0: break;
+        case 1: break;
+        case 2: break;
+        case 3: break;
+        default: break;
+    }
 }
 
 
@@ -5480,7 +5517,16 @@ void process_command(void) {
             resp_armed = 0;
             resp_phase = 0;
             resp_request= 0;
-            resp_pull_us = (read_adc_rb1() < 20) ? 1800 : 800;
+
+
+
+            if ((PORTAbits.RA1 == 0) || (PORTAbits.RA2 == 0)) {
+                resp_pull_us = 0;
+                do { LATCbits.LATC4 = 1; } while(0);
+            } else {
+                resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
+                do { LATCbits.LATC4 = 0; } while(0);
+            }
             reset_counter = 0;
             activate_counter = 0;
             break;
@@ -5527,6 +5573,12 @@ void main(void) {
     do { TRISCbits.TRISC7 = 0; } while(0);
     do { TRISAbits.TRISA3 = 0; } while(0);
     do { LATAbits.LATA3 = 0; } while(0);
+
+
+
+
+    ANSELAbits.ANSA1 = 0;
+    ANSELAbits.ANSA2 = 0;
 
 
     for (uint8_t i = 0; i < 3; i++) {
@@ -5594,6 +5646,9 @@ void main(void) {
             }
         }
 
-        if (!in_response) _delay((unsigned long)((100)*(16000000/4000000.0)));
+        if (!in_response) {
+            apply_mode_select();
+            _delay((unsigned long)((100)*(16000000/4000000.0)));
+        }
     }
 }

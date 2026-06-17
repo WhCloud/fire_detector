@@ -77,7 +77,8 @@ typedef enum
     ADC_CHANNEL_TEMP =  0x1d, /**< Temp*/ 
     ADC_CHANNEL_DAC =  0x1e, /**< DAC*/ 
     ADC_CHANNEL_FVR =  0x1f, /**< FVR*/ 
-    ADC_CHANNEL_AN0 =  0x0 /**< IO_R0: R0*/ 
+    ADC_CHANNEL_ANA0 =  undefined, /**< ADC_IN1: RA0*/ 
+    ADC_CHANNEL_AN0 =  0x0 /**< IO_R0: AN0*/ 
 } adc_channel_t;
 
 /**

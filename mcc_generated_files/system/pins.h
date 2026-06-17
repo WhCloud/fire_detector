@@ -68,6 +68,44 @@
 #define ADC_IN1_SetOpenDrain()       do { ODCONAbits. = 1; } while(0)
 #define ADC_IN1_SetAnalogMode()      do { ANSELAbits.ANSA0 = 1; } while(0)
 #define ADC_IN1_SetDigitalMode()     do { ANSELAbits.ANSA0 = 0; } while(0)
+// get/set IO_RA1 aliases
+#define EN_PIN3_TRIS                 TRISAbits.TRISA1
+#define EN_PIN3_LAT                  LATAbits.LATA1
+#define EN_PIN3_PORT                 PORTAbits.RA1
+#define EN_PIN3_WPU                  WPUAbits.
+#define EN_PIN3_OD                   ODCONAbits.
+#define EN_PIN3_ANS                  ANSELAbits.ANSA1
+#define EN_PIN3_SetHigh()            do { LATAbits.LATA1 = 1; } while(0)
+#define EN_PIN3_SetLow()             do { LATAbits.LATA1 = 0; } while(0)
+#define EN_PIN3_Toggle()             do { LATAbits.LATA1 = ~LATAbits.LATA1; } while(0)
+#define EN_PIN3_GetValue()           PORTAbits.RA1
+#define EN_PIN3_SetDigitalInput()    do { TRISAbits.TRISA1 = 1; } while(0)
+#define EN_PIN3_SetDigitalOutput()   do { TRISAbits.TRISA1 = 0; } while(0)
+#define EN_PIN3_SetPullup()          do { WPUAbits. = 1; } while(0)
+#define EN_PIN3_ResetPullup()        do { WPUAbits. = 0; } while(0)
+#define EN_PIN3_SetPushPull()        do { ODCONAbits. = 0; } while(0)
+#define EN_PIN3_SetOpenDrain()       do { ODCONAbits. = 1; } while(0)
+#define EN_PIN3_SetAnalogMode()      do { ANSELAbits.ANSA1 = 1; } while(0)
+#define EN_PIN3_SetDigitalMode()     do { ANSELAbits.ANSA1 = 0; } while(0)
+// get/set IO_RA2 aliases
+#define EN_PIN4_TRIS                 TRISAbits.TRISA2
+#define EN_PIN4_LAT                  LATAbits.LATA2
+#define EN_PIN4_PORT                 PORTAbits.RA2
+#define EN_PIN4_WPU                  WPUAbits.
+#define EN_PIN4_OD                   ODCONAbits.
+#define EN_PIN4_ANS                  ANSELAbits.ANSA2
+#define EN_PIN4_SetHigh()            do { LATAbits.LATA2 = 1; } while(0)
+#define EN_PIN4_SetLow()             do { LATAbits.LATA2 = 0; } while(0)
+#define EN_PIN4_Toggle()             do { LATAbits.LATA2 = ~LATAbits.LATA2; } while(0)
+#define EN_PIN4_GetValue()           PORTAbits.RA2
+#define EN_PIN4_SetDigitalInput()    do { TRISAbits.TRISA2 = 1; } while(0)
+#define EN_PIN4_SetDigitalOutput()   do { TRISAbits.TRISA2 = 0; } while(0)
+#define EN_PIN4_SetPullup()          do { WPUAbits. = 1; } while(0)
+#define EN_PIN4_ResetPullup()        do { WPUAbits. = 0; } while(0)
+#define EN_PIN4_SetPushPull()        do { ODCONAbits. = 0; } while(0)
+#define EN_PIN4_SetOpenDrain()       do { ODCONAbits. = 1; } while(0)
+#define EN_PIN4_SetAnalogMode()      do { ANSELAbits.ANSA2 = 1; } while(0)
+#define EN_PIN4_SetDigitalMode()     do { ANSELAbits.ANSA2 = 0; } while(0)
 // get/set IO_RA3 aliases
 #define DATA_OUT_TRIS                 TRISAbits.TRISA3
 #define DATA_OUT_LAT                  LATAbits.LATA3
