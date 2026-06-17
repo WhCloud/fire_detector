@@ -41,7 +41,7 @@
 
 #define _XTAL_FREQ 16000000
 
-#define MODULE_TYPE	0x04
+#define MODULE_TYPE 0x04
 #define CURRENT_WIDTH_LOW 600
 #define CURRENT_WIDTH_HIGH 2000
 #define ADC_REF_MVOLTS 5000
@@ -278,11 +278,28 @@ static uint16_t convert_adc_to_pulse_usec(uint16_t adc_val) {
 static void apply_mode_select(void) {
     uint8_t sel = (uint8_t)((MODE1_GetValue() << 1) | MODE2_GetValue());
     switch (sel) {
-        case 0:  /* TODO: состояние 0 */ break;
-        case 1:  /* TODO: состояние 1 */ break;
-        case 2:  /* TODO: состояние 2 */ break;
-        case 3:  /* TODO: состояние 3 */ break;
-        default: break;
+        case 0: {
+                LOAD_SetHigh();
+                Y_LED_SetHigh();
+            } 
+            break;
+        case 1: {
+                LOAD_SetHigh();
+                Y_LED_SetHigh();
+            }
+            break;
+        case 2: {
+                LOAD_SetHigh();
+                Y_LED_SetHigh();
+            }
+            break;
+        case 3: 
+                LOAD_SetHigh();
+                Y_LED_SetHigh();
+            }
+            break;
+        default: 
+            break;
     }
 }
 
@@ -364,8 +381,7 @@ void process_command(void) {
             reset_counter = 0;
             if (++activate_counter >= 4) {
                 activate_counter = 0;
-                LOAD_SetHigh();
-                Y_LED_SetHigh();
+                apply_mode_select();
             }
             break;
 
@@ -471,7 +487,6 @@ void main(void) {
         }
 
         if (!in_response) {
-            apply_mode_select();             /* опрос селектора режима, пины 24/26 (заготовка) */
             __delay_us(100);                 /* в ответе — минимум задержки метка->импульс */
         }
     }
