@@ -196,11 +196,15 @@ void protocol_on_bus_change(void) {
  * импульса заглушён снаружи + других прерываний нет -> цикл не прерывается. Чтение
  * TMR1 на приём не влияет (prev_ticks правит только ISR). us чётное (=2600-2*mV). */
 void send_pulse(uint16_t us) {
-    uint16_t ticks = US_TO_TICKS(us);
-    DATA_OUT_SetHigh();
-    uint16_t t0 = tmr1_ticks();
-    while ((uint16_t)(tmr1_ticks() - t0) < ticks) { }
-    DATA_OUT_SetLow();
+    if (us > 0) { 
+        uint16_t ticks = US_TO_TICKS(us);
+        DATA_OUT_SetHigh();
+        uint16_t t0 = tmr1_ticks();
+        while ((uint16_t)(tmr1_ticks() - t0) < ticks) { }
+        DATA_OUT_SetLow();
+    } else {
+        /* Не посылать ничего в случае ошибки */
+    }
 }
 
 void send_type_bits(uint8_t type) {
