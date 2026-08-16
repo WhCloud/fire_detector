@@ -53,9 +53,19 @@
  *    ошибку (нулевой импульс smoke/heat). ANSEL для них сбрасывается в main()
  *    (MCC ставит RA1/RA2 аналоговыми) — иначе цифровое чтение вернёт всегда 0.
  *  Пины 24 (RB3=MODE1) и 26 (RB5=MODE2) — 2-битный селектор режима:
- *    бит1 = пин 24 (RB3), бит0 = пин 26 (RB5); уже цифровые входы. */
+ *    бит1 = пин 24 (RB3), бит0 = пин 26 (RB5); уже цифровые входы.
+ *  Пины 22 (RB1=AN10) и 23 (RB2=AN8) — аналоговые входы АЦП (см. ADC_CH_* ниже). */
 #define ENABLE_PIN3_GetValue()  PORTAbits.RA1
 #define ENABLE_PIN4_GetValue()  PORTAbits.RA2
+
+/* Каналы АЦП (PIC16F1936, 28 pin):
+ *  Пин 2  (RA0) = AN0  — основной вход (был единственным).
+ *  Пин 22 (RB1) = AN10 — второй вход: меряется так же, на линию идёт БОЛЬШЕЕ из двух.
+ *  Пин 23 (RB2) = AN8  — инициализирован, в ответе пока не участвует.
+ * ANSELB/WPUB для 22/23 доводятся в main() (MCC оставляет подтяжки включёнными). */
+#define ADC_CH_MAIN    0u   /* AN0,  RA0, пин 2  */
+#define ADC_CH_PIN22  10u   /* AN10, RB1, пин 22 */
+#define ADC_CH_PIN23   8u   /* AN8,  RB2, пин 23 */
 
 /* TMR1 = Fosc/4 (4 МГц) с прескалером 1:8 => 0.5 МГц => 2 мкс на тик.
  * Прескалер 1:8 КРИТИЧЕН: переполнение раз в 131 мс (65536*2 мкс) — заметно
@@ -228,14 +238,26 @@ void send_type_bits(uint8_t type) {
     }
 }
 
-uint16_t read_adc_rb1(void) {
+/* Одно измерение указанного канала. 10 мкс на заряд C_HOLD после смены канала
+ * (Tacq по спеке ~5 мкс) обязательны: иначе первое измерение после переключения
+ * тянет остаток заряда от предыдущего канала. */
+uint16_t read_adc_ch(uint8_t chs) {
     ADCON1 = 0xA0;   /* ADFM=1 (right), ADCS=Fosc/32 (Tad=2мкс @16МГц; Fosc/2 был вне спеки 1мкс), ADPREF=VDD */
     ADCON0 = 0x01;
-    ADCON0bits.CHS = 0;
+    ADCON0bits.CHS = chs;
     __delay_us(10);
     ADCON0bits.GO = 1;
     while (ADCON0bits.GO);
     return ((uint16_t)ADRESH << 8) | ADRESL;
+}
+
+/* Меряем оба входа, на линию идёт БОЛЬШЕЕ напряжение. Сравниваем сырые коды АЦП:
+ * шкала у каналов общая (VDD/1024), поэтому больший код = большее напряжение,
+ * а конверсия в мВ нужна ровно одна. */
+uint16_t read_adc_max(void) {
+    uint16_t v_main  = read_adc_ch(ADC_CH_MAIN);
+    uint16_t v_pin22 = read_adc_ch(ADC_CH_PIN22);
+    return (v_pin22 > v_main) ? v_pin22 : v_main;
 }
 
 /* Одна фаза ответа по метке T2. Значение тока (resp_pull_us) предчитано на старте
@@ -364,10 +386,11 @@ void process_command(void) {
                 resp_pull_us = 0;
                 R_LED_SetHigh();
             } else {
-                resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
+                /* Больший из двух входов (пин 2 / пин 22) -> ширина импульса.
+                 * Вне окна 300..1000 мВ conversion даёт 0 -> ответ не шлётся. */
+                resp_pull_us = convert_adc_to_pulse_usec(read_adc_max());
                 R_LED_SetLow();
-            } 
-            // resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
+            }
             reset_counter    = 0;
             activate_counter = 0;
             break;
@@ -419,6 +442,17 @@ void main(void) {
      * читает только AN0/RA0, эти каналы не нужны. */
     ANSELAbits.ANSA1 = 0;
     ANSELAbits.ANSA2 = 0;
+
+    /* Пины 22 (RB1=AN10) и 23 (RB2=AN8) — аналоговые входы АЦП. ANSELB/TRISB MCC
+     * уже ставит верно (0x16 / вход), но пишем явно, чтобы перегенерация не сломала.
+     * WPUB=0x16 (pins.c) при nWPUEN=0 включает слабые подтяжки к VDD: на аналоговом
+     * входе они тянут узел вверх и завышают измерение — снимаем. */
+    ANSELBbits.ANSB1 = 1;
+    ANSELBbits.ANSB2 = 1;
+    TRISBbits.TRISB1 = 1;
+    TRISBbits.TRISB2 = 1;
+    WPUBbits.WPUB1   = 0;
+    WPUBbits.WPUB2   = 0;
 
     /* стартовая индикация */
     for (uint8_t i = 0; i < 3; i++) {
