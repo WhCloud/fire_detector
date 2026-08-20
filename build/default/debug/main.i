@@ -7,6 +7,7 @@
 # 1 "C:\\Program Files\\Microchip\\xc8\\v3.10\\pic\\include/language_support.h" 1 3
 # 2 "<built-in>" 2
 # 1 "main.c" 2
+# 38 "main.c"
 # 1 "./mcc_generated_files/system/system.h" 1
 # 39 "./mcc_generated_files/system/system.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v3.10\\pic\\include/xc.h" 1 3
@@ -4997,7 +4998,7 @@ void CLOCK_Initialize(void);
 # 40 "./mcc_generated_files/system/config_bits.h" 2
 # 43 "./mcc_generated_files/system/system.h" 2
 # 1 "./mcc_generated_files/system/../system/pins.h" 1
-# 344 "./mcc_generated_files/system/../system/pins.h"
+# 306 "./mcc_generated_files/system/../system/pins.h"
 void PIN_MANAGER_Initialize (void);
 
 
@@ -5015,11 +5016,11 @@ void PIN_MANAGER_IOC(void);
 
 
 void DATA_IN_ISR(void);
-# 370 "./mcc_generated_files/system/../system/pins.h"
+# 332 "./mcc_generated_files/system/../system/pins.h"
 void DATA_IN_SetInterruptHandler(void (* InterruptHandler)(void));
-# 381 "./mcc_generated_files/system/../system/pins.h"
+# 343 "./mcc_generated_files/system/../system/pins.h"
 extern void (*DATA_IN_InterruptHandler)(void);
-# 392 "./mcc_generated_files/system/../system/pins.h"
+# 354 "./mcc_generated_files/system/../system/pins.h"
 void DATA_IN_DefaultInterruptHandler(void);
 # 44 "./mcc_generated_files/system/system.h" 2
 # 1 "./mcc_generated_files/system/../system/interrupt.h" 1
@@ -5048,11 +5049,7 @@ typedef enum
     ADC_CHANNEL_TEMP = 0x1d,
     ADC_CHANNEL_DAC = 0x1e,
     ADC_CHANNEL_FVR = 0x1f,
-    ADC_CHANNEL_ANA0 = 0,
-    ADC_CHANNEL_ANA1 = 1,
-    ADC_CHANNEL_ANA2 = 2,
-    ADC_CHANNEL_ANB1 = 3,
-    ADC_CHANNEL_ANB2 = 4,
+    ADC_CHANNEL_ANA0 = 0x0,
     ADC_CHANNEL_AN0 = 0x0
 } adc_channel_t;
 
@@ -5066,7 +5063,7 @@ typedef enum
     ADC_TRIGGER_SOURCE_DISABLED = 0x0
 } adc_trigger_source_t ;
 # 42 "./mcc_generated_files/system/../adc/adc.h" 2
-# 89 "./mcc_generated_files/system/../adc/adc.h"
+# 65 "./mcc_generated_files/system/../adc/adc.h"
 void ADC_Initialize(void);
 
 
@@ -5100,9 +5097,9 @@ void ADC_Disable(void);
 
 
 void ADC_ChannelSelect(adc_channel_t channel);
-# 131 "./mcc_generated_files/system/../adc/adc.h"
+# 107 "./mcc_generated_files/system/../adc/adc.h"
 void ADC_ConversionStart(void);
-# 141 "./mcc_generated_files/system/../adc/adc.h"
+# 117 "./mcc_generated_files/system/../adc/adc.h"
 _Bool ADC_IsConversionDone(void);
 
 
@@ -5112,7 +5109,7 @@ _Bool ADC_IsConversionDone(void);
 
 
 void ADC_ConversionStop(void);
-# 158 "./mcc_generated_files/system/../adc/adc.h"
+# 134 "./mcc_generated_files/system/../adc/adc.h"
 adc_result_t ADC_ConversionResultGet(void);
 
 
@@ -5146,7 +5143,7 @@ uint8_t ADC_ResolutionGet(void);
 
 
 void ADC_ConversionDoneInterruptFlagClear(void);
-# 199 "./mcc_generated_files/system/../adc/adc.h"
+# 175 "./mcc_generated_files/system/../adc/adc.h"
 _Bool ADC_IsConversionDoneInterruptFlagSet(void);
 
 
@@ -5185,7 +5182,7 @@ void ADC_ISR(void);
 # 41 "./mcc_generated_files/system/../timer/tmr1.h"
 # 1 "./mcc_generated_files/system/../timer/tmr1_deprecated.h" 1
 # 42 "./mcc_generated_files/system/../timer/tmr1.h" 2
-# 191 "./mcc_generated_files/system/../timer/tmr1.h"
+# 185 "./mcc_generated_files/system/../timer/tmr1.h"
 void TMR1_Initialize(void);
 
 
@@ -5195,19 +5192,19 @@ void TMR1_Initialize(void);
 
 
 void TMR1_Deinitialize(void);
-# 208 "./mcc_generated_files/system/../timer/tmr1.h"
+# 202 "./mcc_generated_files/system/../timer/tmr1.h"
 void TMR1_Start(void);
-# 217 "./mcc_generated_files/system/../timer/tmr1.h"
+# 211 "./mcc_generated_files/system/../timer/tmr1.h"
 void TMR1_Stop(void);
-# 226 "./mcc_generated_files/system/../timer/tmr1.h"
+# 220 "./mcc_generated_files/system/../timer/tmr1.h"
 uint16_t TMR1_CounterGet(void);
-# 235 "./mcc_generated_files/system/../timer/tmr1.h"
+# 229 "./mcc_generated_files/system/../timer/tmr1.h"
 void TMR1_CounterSet(uint16_t timerVal);
-# 244 "./mcc_generated_files/system/../timer/tmr1.h"
+# 238 "./mcc_generated_files/system/../timer/tmr1.h"
 void TMR1_PeriodSet(uint16_t periodVal);
-# 253 "./mcc_generated_files/system/../timer/tmr1.h"
+# 247 "./mcc_generated_files/system/../timer/tmr1.h"
 uint16_t TMR1_PeriodGet(void);
-# 262 "./mcc_generated_files/system/../timer/tmr1.h"
+# 256 "./mcc_generated_files/system/../timer/tmr1.h"
 void TMR1_Reload(void);
 
 
@@ -5217,10 +5214,12 @@ void TMR1_Reload(void);
 
 
 uint16_t TMR1_MaxCountGet(void);
-# 279 "./mcc_generated_files/system/../timer/tmr1.h"
+# 273 "./mcc_generated_files/system/../timer/tmr1.h"
 void TMR1_SinglePulseAcquisitionStart(void);
-# 288 "./mcc_generated_files/system/../timer/tmr1.h"
+# 282 "./mcc_generated_files/system/../timer/tmr1.h"
 uint8_t TMR1_GateStateGet(void);
+# 291 "./mcc_generated_files/system/../timer/tmr1.h"
+_Bool TMR1_OverflowStatusGet(void);
 
 
 
@@ -5228,24 +5227,8 @@ uint8_t TMR1_GateStateGet(void);
 
 
 
-void TMR1_OverflowInterruptEnable(void);
-
-
-
-
-
-
-
-void TMR1_OverflowInterruptDisable(void);
-
-
-
-
-
-
-
-void TMR1_OverflowISR(void);
-# 321 "./mcc_generated_files/system/../timer/tmr1.h"
+void TMR1_OverflowStatusClear(void);
+# 308 "./mcc_generated_files/system/../timer/tmr1.h"
 _Bool TMR1_GateEventStatusGet(void);
 
 
@@ -5289,43 +5272,32 @@ void TMR1_Tasks(void);
 
 
 void SYSTEM_Initialize(void);
-# 2 "main.c" 2
-
-
-
-
-
-
-typedef enum {
-    IDLE,
-    RECEIVING_BITS,
-    WAIT_T2,
-    CMD_READY
-} rx_state_t;
-
-typedef enum {
-    AWAIT_FIRST,
-    AWAIT_SECOND,
-    AWAIT_ADDR1,
-    AWAIT_ADDR2
-} set_addr_state_t;
-
-volatile rx_state_t rx_state = IDLE;
-volatile uint8_t bit_count = 0;
+# 39 "main.c" 2
+# 97 "main.c"
+volatile uint8_t bit_count = 12;
 volatile uint32_t rx_buffer = 0;
+volatile uint16_t prev_ticks = 0;
+
 volatile uint8_t cmd_ready = 0;
 volatile uint8_t rx_mode = 0;
 volatile uint8_t rx_addr = 0;
 
-volatile set_addr_state_t set_addr_state = AWAIT_FIRST;
-volatile uint8_t new_address = 0;
+volatile uint8_t in_response = 0;
+volatile uint8_t resp_armed = 0;
+volatile uint8_t resp_phase = 0;
+volatile uint8_t resp_request= 0;
+uint16_t resp_pull_us = 600;
+
+
+typedef enum { AWAIT_FIRST, AWAIT_SECOND, AWAIT_ADDR1, AWAIT_ADDR2 } set_addr_state_t;
+set_addr_state_t set_addr_state = AWAIT_FIRST;
+uint8_t new_address = 0;
 uint8_t my_address = 0x01;
+uint8_t reset_counter = 0;
+uint8_t activate_counter = 0;
 
-static uint8_t reset_counter = 0;
-static uint8_t activate_counter = 0;
 
-volatile uint8_t t2_received = 0;
-volatile uint8_t response_phase = 0;
+
 
 uint8_t eeprom_read(uint8_t addr) {
     EEADRL = addr;
@@ -5347,76 +5319,78 @@ void eeprom_write(uint8_t addr, uint8_t data) {
     EECON1bits.WREN = 0;
 }
 
-void Timer1_TimeoutHandler(void) {
-    TMR1_Stop();
-    if (rx_state == WAIT_T2) {
-        rx_state = IDLE;
-        t2_received = 0;
-        response_phase = 0;
-    } else {
-        rx_state = IDLE;
-        bit_count = 0;
-    }
+
+
+
+static uint16_t tmr1_ticks(void) {
+    uint8_t hi = TMR1H;
+    uint8_t lo = TMR1L;
+    if (TMR1H != hi) { hi = TMR1H; lo = TMR1L; }
+    return ((uint16_t)hi << 8) | lo;
 }
 
+
+
+
+
 void protocol_on_bus_change(void) {
+    uint16_t cur = tmr1_ticks();
 
-    do { LATCbits.LATC4 = 1; } while(0);
-    _delay((unsigned long)((50)*(16000000/4000000.0)));
-    do { LATCbits.LATC4 = 0; } while(0);
+    PIR1bits.TMR1IF = 0;
 
-    if (rx_state == WAIT_T2) {
-        if (PORTBbits.RB0 == 1) {
-            TMR1_CounterSet(0);
-            TMR1_Start();
-        } else {
-            TMR1_Stop();
-            uint16_t ticks = TMR1_CounterGet();
-            uint16_t us = ticks / 4;
-            if (us > 100 && us < 200) {
-                t2_received = 1;
-            }
+    uint16_t delta = (uint16_t)(cur - prev_ticks);
+    prev_ticks = cur;
+
+
+
+
+
+
+
+    if (delta >= ((uint16_t)((uint32_t)(4000) / 2u))) {
+        bit_count = 0;
+        rx_buffer = 0;
+        in_response = 0;
+        resp_armed = 0;
+        resp_phase = 0;
+        return;
+    }
+
+
+    if (in_response) {
+        if (!resp_armed) {
+
+
+            if (delta >= ((uint16_t)((uint32_t)(400) / 2u))) resp_armed = 1;
+        } else if (delta >= ((uint16_t)((uint32_t)(100) / 2u)) && delta <= ((uint16_t)((uint32_t)(200) / 2u))) {
+            resp_request = 1;
         }
         return;
     }
 
-    if (PORTBbits.RB0 == 1) {
-        TMR1_CounterSet(0);
-        TMR1_Start();
-    } else {
-        TMR1_Stop();
-        uint16_t ticks = TMR1_CounterGet();
-        uint16_t us = ticks / 4;
 
-        if (rx_state == IDLE) {
-            rx_state = RECEIVING_BITS;
-            bit_count = 0;
-            rx_buffer = 0;
-        }
-        if (rx_state == RECEIVING_BITS) {
-            uint8_t bit = (us < 450) ? 0 : 1;
-            rx_buffer |= (uint32_t)bit << bit_count;
-            bit_count++;
-            if (bit_count == 15) {
-                rx_state = CMD_READY;
-                rx_mode = rx_buffer & 0x0F;
-                rx_addr = (rx_buffer >> 4) & 0xFF;
-                cmd_ready = 1;
-
-                do { LATCbits.LATC5 = 1; } while(0);
-                _delay((unsigned long)((500)*(16000000/4000000.0)));
-                do { LATCbits.LATC5 = 0; } while(0);
-            }
+    if (bit_count < 12) {
+        uint8_t bit = (delta >= ((uint16_t)((uint32_t)(450) / 2u))) ? 1u : 0u;
+        rx_buffer |= (uint32_t)bit << bit_count;
+        bit_count++;
+        if (bit_count == 12) {
+            rx_mode = (uint8_t)(rx_buffer & 0x0F);
+            rx_addr = (uint8_t)((rx_buffer >> 4) & 0xFF);
+            cmd_ready = 1;
         }
     }
 }
-
+# 217 "main.c"
 void send_pulse(uint16_t us) {
-    do { LATAbits.LATA3 = 1; } while(0);
-    if (us == 800) _delay((unsigned long)((800)*(16000000/4000000.0)));
-    else if (us == 1800) _delay((unsigned long)((1800)*(16000000/4000000.0)));
-    else _delay((unsigned long)((1000)*(16000000/4000000.0)));
-    do { LATAbits.LATA3 = 0; } while(0);
+    if (us > 0) {
+        uint16_t ticks = ((uint16_t)((uint32_t)(us) / 2u));
+        do { LATAbits.LATA3 = 1; } while(0);
+        uint16_t t0 = tmr1_ticks();
+        while ((uint16_t)(tmr1_ticks() - t0) < ticks) { }
+        do { LATAbits.LATA3 = 0; } while(0);
+    } else {
+
+    }
 }
 
 void send_type_bits(uint8_t type) {
@@ -5431,151 +5405,290 @@ void send_type_bits(uint8_t type) {
     }
 }
 
-uint16_t read_adc_rb1(void) {
-    ADCON1 = 0x80;
+
+
+
+uint16_t read_adc_ch(uint8_t chs) {
+    ADCON1 = 0xA0;
     ADCON0 = 0x01;
-    ADCON0bits.CHS = 4;
+    ADCON0bits.CHS = chs;
     _delay((unsigned long)((10)*(16000000/4000000.0)));
     ADCON0bits.GO = 1;
     while (ADCON0bits.GO);
     return ((uint16_t)ADRESH << 8) | ADRESL;
 }
 
-void send_response_phase(void) {
-    uint16_t adc_val = read_adc_rb1();
-    uint16_t pulse_us = (adc_val < 20) ? 800 : 1800;
 
-    switch (response_phase) {
-        case 0: send_pulse(pulse_us); break;
-        case 1: send_type_bits(0x06); break;
-        case 2: send_pulse(pulse_us); break;
+
+
+uint16_t read_adc_max(void) {
+    uint16_t v_main = read_adc_ch(0u);
+    uint16_t v_pin22 = read_adc_ch(10u);
+    return (v_pin22 > v_main) ? v_pin22 : v_main;
+}
+
+
+
+void send_response_phase(uint8_t phase) {
+    switch (phase) {
+        case 0: send_pulse(resp_pull_us); break;
+        case 1: send_type_bits(0x04); break;
+        case 2: send_pulse(resp_pull_us); break;
+        default: break;
     }
 }
 
-void process_command(void) {
-    if (rx_mode == 1) {
-        if (set_addr_state == AWAIT_FIRST && rx_addr == 0x55)
-            set_addr_state = AWAIT_SECOND;
-        else if (set_addr_state == AWAIT_SECOND && rx_addr == 0x3A)
-            set_addr_state = AWAIT_ADDR1;
-        else if (set_addr_state == AWAIT_ADDR1) {
-            new_address = rx_addr;
-            set_addr_state = AWAIT_ADDR2;
-        } else if (set_addr_state == AWAIT_ADDR2 && rx_addr == new_address) {
-            eeprom_write(0, new_address);
-            my_address = new_address;
-            set_addr_state = AWAIT_FIRST;
-            for (int i = 0; i < 2; i++) {
-                do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((100)*(16000000/4000.0)));
-                do { LATCbits.LATC5 = 0; } while(0); _delay((unsigned long)((100)*(16000000/4000.0)));
+
+
+
+static void reset_sequencers(void) {
+    set_addr_state = AWAIT_FIRST;
+    reset_counter = 0;
+    activate_counter = 0;
+}
+
+static uint16_t convert_adc_to_pulse_usec(uint16_t adc_val) {
+    uint16_t _pulse_width = 0;
+
+
+
+
+    uint16_t adc_val_mvolts = (uint16_t)(((uint32_t)5000 * adc_val + 512u) / 1024u);
+    if ((adc_val_mvolts >= 300) && (adc_val_mvolts <= 1000)) {
+        _pulse_width = (2000 + 600) - 2 * adc_val_mvolts;
+    }
+
+    return _pulse_width;
+}
+
+
+
+
+static void apply_mode_select(void) {
+    uint8_t sel = (uint8_t)((PORTBbits.RB3 << 1) | PORTBbits.RB5);
+    switch (sel) {
+        case 0: {
+                do { LATCbits.LATC7 = 1; } while(0);
+                do { LATCbits.LATC6 = 1; } while(0);
             }
-        } else {
-            set_addr_state = AWAIT_FIRST;
+            break;
+        case 1: {
+                do { LATCbits.LATC7 = 1; } while(0);
+                do { LATCbits.LATC6 = 1; } while(0);
+            }
+            break;
+        case 2: {
+                do { LATCbits.LATC7 = 1; } while(0);
+                do { LATCbits.LATC6 = 1; } while(0);
+            }
+            break;
+        case 3: {
+                do { LATCbits.LATC7 = 1; } while(0);
+                do { LATCbits.LATC6 = 1; } while(0);
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+
+
+
+void process_command(void) {
+
+
+    if (rx_mode == 1) {
+        switch (set_addr_state) {
+            case AWAIT_FIRST:
+                set_addr_state = (rx_addr == 0x55) ? AWAIT_SECOND : AWAIT_FIRST;
+                break;
+            case AWAIT_SECOND:
+                set_addr_state = (rx_addr == 0x3A) ? AWAIT_ADDR1 : AWAIT_FIRST;
+                break;
+            case AWAIT_ADDR1:
+                new_address = rx_addr;
+                set_addr_state = AWAIT_ADDR2;
+                break;
+            case AWAIT_ADDR2:
+                if (rx_addr == new_address) {
+                    eeprom_write(0, new_address);
+                    my_address = new_address;
+
+
+
+
+
+
+                }
+                set_addr_state = AWAIT_FIRST;
+                break;
         }
         return;
     }
 
-    if (rx_mode == 5 || rx_mode == 6 || rx_mode == 7) {
-        for (int i = 0; i < 10; i++) {
-            do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((250)*(16000000/4000.0)));
-            do { LATCbits.LATC5 = 0; } while(0); _delay((unsigned long)((250)*(16000000/4000.0)));
-        }
+
+    set_addr_state = AWAIT_FIRST;
+
+
+    if (rx_addr != my_address) {
+
+
+        reset_counter = 0;
+        activate_counter = 0;
         return;
     }
-
-    if (rx_addr != my_address) return;
 
     switch (rx_mode) {
         case 0:
         case 4:
-            rx_state = WAIT_T2;
-            response_phase = 0;
-            t2_received = 0;
-            TMR1_CounterSet(0);
-            TMR1_Start();
-            do { LATCbits.LATC5 = 1; } while(0);
-            _delay((unsigned long)((100)*(16000000/4000000.0)));
-            do { LATCbits.LATC5 = 0; } while(0);
+            in_response = 1;
+            resp_armed = 0;
+            resp_phase = 0;
+            resp_request= 0;
+
+
+
+            if ((PORTAbits.RA1 == 0) || (PORTAbits.RA2 == 0)) {
+                resp_pull_us = 0;
+                do { LATCbits.LATC4 = 1; } while(0);
+            } else {
+
+
+                resp_pull_us = convert_adc_to_pulse_usec(read_adc_max());
+                do { LATCbits.LATC4 = 0; } while(0);
+            }
+            reset_counter = 0;
+            activate_counter = 0;
             break;
 
         case 2:
-            reset_counter++;
-            if (reset_counter >= 4) { reset_counter = 0; __asm("reset"); }
+            activate_counter = 0;
+            if (++reset_counter >= 4) { reset_counter = 0; __asm("reset"); }
             break;
 
         case 3:
-            activate_counter++;
-            if (activate_counter >= 4) {
+            reset_counter = 0;
+            if (++activate_counter >= 4) {
                 activate_counter = 0;
-                do { LATCbits.LATC4 = 1; } while(0);
-                do { LATCbits.LATC7 = 1; } while(0);
+                apply_mode_select();
             }
             break;
 
-        default: break;
+        case 5:
+        case 6:
+        case 7:
+            reset_counter = 0;
+            activate_counter = 0;
+
+            do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((60)*(16000000/4000.0))); do { LATCbits.LATC5 = 0; } while(0);
+            break;
+
+        default:
+            reset_counter = 0;
+            activate_counter = 0;
+            break;
     }
 }
+
+
+
 
 void main(void) {
     SYSTEM_Initialize();
 
     do { TRISCbits.TRISC5 = 0; } while(0);
+    do { TRISCbits.TRISC6 = 0; } while(0);
     do { TRISCbits.TRISC4 = 0; } while(0);
     do { TRISCbits.TRISC7 = 0; } while(0);
+    do { TRISAbits.TRISA3 = 0; } while(0);
+    do { LATAbits.LATA3 = 0; } while(0);
+
+
+
+
+    ANSELAbits.ANSA1 = 0;
+    ANSELAbits.ANSA2 = 0;
+
+
+
+
+
+    ANSELBbits.ANSB1 = 1;
+    ANSELBbits.ANSB2 = 1;
+    TRISBbits.TRISB1 = 1;
+    TRISBbits.TRISB2 = 1;
+    WPUBbits.WPUB1 = 0;
+    WPUBbits.WPUB2 = 0;
 
 
     for (uint8_t i = 0; i < 3; i++) {
-        do { LATCbits.LATC4 = 1; } while(0);
-        _delay((unsigned long)((200)*(16000000/4000.0)));
-        do { LATCbits.LATC4 = 0; } while(0);
-        _delay((unsigned long)((200)*(16000000/4000.0)));
+        do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((150)*(16000000/4000.0)));
+        do { LATCbits.LATC5 = 0; } while(0); _delay((unsigned long)((150)*(16000000/4000.0)));
     }
 
-    TMR1_Stop();
-    TMR1_OverflowCallbackRegister(Timer1_TimeoutHandler);
+
+
+
+
+    T1CON = 0;
+    T1CONbits.TMR1CS = 0;
+    T1CONbits.T1CKPS = 3;
+    T1CONbits.nT1SYNC = 1;
+    TMR1 = 0;
+    PIE1bits.TMR1IE = 0;
+    T1CONbits.TMR1ON = 1;
 
     my_address = eeprom_read(0);
     if (my_address == 0xFF || my_address == 0) my_address = 0x01;
 
+
+    prev_ticks = TMR1;
+    PIR1bits.TMR1IF = 0;
+    bit_count = 12;
+
     DATA_IN_SetInterruptHandler(protocol_on_bus_change);
-
-    INTCONbits.GIE = 1;
     INTCONbits.PEIE = 1;
+    INTCONbits.GIE = 1;
 
+    do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((100)*(16000000/4000.0))); do { LATCbits.LATC5 = 0; } while(0);
 
-    do { LATCbits.LATC5 = 1; } while(0);
-    _delay((unsigned long)((100)*(16000000/4000.0)));
-    do { LATCbits.LATC5 = 0; } while(0);
-
-
-    uint16_t loop_counter = 0;
+    uint16_t idle_loops = 0;
 
     while (1) {
-        loop_counter++;
-        if (loop_counter >= 5000) {
-            loop_counter = 0;
-            do { LATCbits.LATC5 = ~LATCbits.LATC5; } while(0);
-        }
-
         if (cmd_ready) {
             cmd_ready = 0;
             process_command();
+            idle_loops = 0;
+        } else if (++idle_loops >= 3000) {
+            idle_loops = 0;
+            reset_sequencers();
         }
 
-        if (rx_state == WAIT_T2 && t2_received) {
-            t2_received = 0;
-            send_response_phase();
-            response_phase++;
-            if (response_phase >= 3) {
-                rx_state = IDLE;
-                response_phase = 0;
-                TMR1_Stop();
-            } else {
-                TMR1_CounterSet(0);
-                TMR1_Start();
+
+
+        if (in_response && resp_request) {
+            resp_request = 0;
+
+
+
+
+            IOCBP = 0x0;
+            IOCBN = 0x0;
+            send_response_phase(resp_phase);
+            IOCBF = 0x0;
+            IOCBP = 0x1;
+            IOCBN = 0x1;
+
+            if (++resp_phase >= 3) {
+                in_response = 0;
+                resp_armed = 0;
+                resp_phase = 0;
             }
         }
 
-        _delay((unsigned long)((100)*(16000000/4000000.0)));
+        if (!in_response) {
+            _delay((unsigned long)((100)*(16000000/4000000.0)));
+        }
     }
 }

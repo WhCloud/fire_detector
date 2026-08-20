@@ -35,13 +35,15 @@
  *   и минимальной паузой между кадрами (~7..16 мс).
  */
 
+/* Поменяны названия светодиодов. везде после смены названия поставлен коммент //ch old_RYG (какой был) */
+
 #include "mcc_generated_files/system/system.h"
 #include <xc.h>
 #include <stdint.h>
 
 #define _XTAL_FREQ 16000000
 
-#define MODULE_TYPE 0x04
+#define MODULE_TYPE 0x06
 #define CURRENT_WIDTH_LOW 600
 #define CURRENT_WIDTH_HIGH 2000
 #define ADC_REF_MVOLTS 5000
@@ -64,8 +66,8 @@
  *  Пин 23 (RB2) = AN8  — инициализирован, в ответе пока не участвует.
  * ANSELB/WPUB для 22/23 доводятся в main() (MCC оставляет подтяжки включёнными). */
 #define ADC_CH_MAIN    0u   /* AN0,  RA0, пин 2  */
-#define ADC_CH_PIN22  10u   /* AN10, RB1, пин 22 */
-#define ADC_CH_PIN23   8u   /* AN8,  RB2, пин 23 */
+#define ADC_CH_LINE  10u   /* AN10, RB1, пин 22 */
+#define ADC_CH_CURR   8u   /* AN8,  RB2, пин 23 */
 
 /* TMR1 = Fosc/4 (4 МГц) с прескалером 1:8 => 0.5 МГц => 2 мкс на тик.
  * Прескалер 1:8 КРИТИЧЕН: переполнение раз в 131 мс (65536*2 мкс) — заметно
@@ -256,7 +258,7 @@ uint16_t read_adc_ch(uint8_t chs) {
  * а конверсия в мВ нужна ровно одна. */
 uint16_t read_adc_max(void) {
     uint16_t v_main  = read_adc_ch(ADC_CH_MAIN);
-    uint16_t v_pin22 = read_adc_ch(ADC_CH_PIN22);
+    uint16_t v_pin22 = read_adc_ch(ADC_CH_LINE);
     return (v_pin22 > v_main) ? v_pin22 : v_main;
 }
 
@@ -302,22 +304,22 @@ static void apply_mode_select(void) {
     switch (sel) {
         case 0: {
                 LOAD_SetHigh();
-                Y_LED_SetHigh();
+                G_LED_SetHigh(); //ch old_Y
             } 
             break;
         case 1: {
                 LOAD_SetHigh();
-                Y_LED_SetHigh();
+                G_LED_SetHigh(); //ch old_Y
             }
             break;
         case 2: {
                 LOAD_SetHigh();
-                Y_LED_SetHigh();
+                G_LED_SetHigh(); //ch old_Y
             }
             break;
         case 3: {
                 LOAD_SetHigh();
-                Y_LED_SetHigh();
+                G_LED_SetHigh(); //ch old_Y
             }
             break;
         default: 
@@ -384,12 +386,12 @@ void process_command(void) {
              * отладочный индикатор ошибки: вкл при ошибке, выкл когда пропала. */
             if ((ENABLE_PIN3_GetValue() == 0) || (ENABLE_PIN4_GetValue() == 0)) {
                 resp_pull_us = 0;
-                R_LED_SetHigh();
+                G_LED_SetHigh(); //ch old_R
             } else {
                 /* Больший из двух входов (пин 2 / пин 22) -> ширина импульса.
                  * Вне окна 300..1000 мВ conversion даёт 0 -> ответ не шлётся. */
                 resp_pull_us = convert_adc_to_pulse_usec(read_adc_max());
-                R_LED_SetLow();
+                G_LED_SetLow(); //ch old_R
             }
             reset_counter    = 0;
             activate_counter = 0;
@@ -404,7 +406,7 @@ void process_command(void) {
             reset_counter = 0;
             if (++activate_counter >= 4) {
                 activate_counter = 0;
-                apply_mode_select();
+                apply_mode_select(); // Если включена эта функция, то при работе ADC_CH_MAIN включается LOAD_SetHigh()!!!  
             }
             break;
 
@@ -414,7 +416,7 @@ void process_command(void) {
             reset_counter    = 0;
             activate_counter = 0;
             /* короткая индикация без длинной блокировки шины */
-            G_LED_SetHigh(); __delay_ms(60); G_LED_SetLow();
+            R_LED_SetHigh(); __delay_ms(60); R_LED_SetLow(); //ch old_G
             break;
 
         default:
@@ -456,8 +458,9 @@ void main(void) {
 
     /* стартовая индикация */
     for (uint8_t i = 0; i < 3; i++) {
-        G_LED_SetHigh(); __delay_ms(150);
-        G_LED_SetLow();  __delay_ms(150);
+        R_LED_SetHigh(); // ch old_G Мне надо, что бы при подаче питания без опроса просто горел индикатор
+        /*__delay_ms(150);
+        G_LED_SetLow();  __delay_ms(150);*/
     }
 
     /* TMR1: Fosc/4 = 4 МГц, прескалер 1:8 => 2 мкс/тик, переполнение раз в 131 мс.
@@ -484,7 +487,7 @@ void main(void) {
     INTCONbits.PEIE = 1;
     INTCONbits.GIE  = 1;
 
-    G_LED_SetHigh(); __delay_ms(100); G_LED_SetLow();
+    //G_LED_SetHigh(); __delay_ms(100); G_LED_SetLow(); //Вообще не понял зачем. Отключил.
 
     uint16_t idle_loops = 0;
 
@@ -517,6 +520,7 @@ void main(void) {
                 in_response = 0;
                 resp_armed  = 0;
                 resp_phase  = 0;
+                R_LED_SetHigh(); __delay_ms(20); R_LED_SetLow(); //ch Раньше не было. Индикация завершившегося опроса
             }
         }
 

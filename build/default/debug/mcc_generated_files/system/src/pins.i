@@ -4987,7 +4987,7 @@ extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 # 29 "C:\\Program Files\\Microchip\\xc8\\v3.10\\pic\\include/xc.h" 2 3
 # 39 "mcc_generated_files/system/src/../pins.h" 2
-# 344 "mcc_generated_files/system/src/../pins.h"
+# 306 "mcc_generated_files/system/src/../pins.h"
 void PIN_MANAGER_Initialize (void);
 
 
@@ -5005,16 +5005,16 @@ void PIN_MANAGER_IOC(void);
 
 
 void DATA_IN_ISR(void);
-# 370 "mcc_generated_files/system/src/../pins.h"
+# 332 "mcc_generated_files/system/src/../pins.h"
 void DATA_IN_SetInterruptHandler(void (* InterruptHandler)(void));
-# 381 "mcc_generated_files/system/src/../pins.h"
+# 343 "mcc_generated_files/system/src/../pins.h"
 extern void (*DATA_IN_InterruptHandler)(void);
-# 392 "mcc_generated_files/system/src/../pins.h"
+# 354 "mcc_generated_files/system/src/../pins.h"
 void DATA_IN_DefaultInterruptHandler(void);
 # 36 "mcc_generated_files/system/src/pins.c" 2
 
 void (*DATA_IN_InterruptHandler)(void);
-extern void protocol_on_bus_change(void);
+
 void PIN_MANAGER_Initialize(void)
 {
 
@@ -5036,13 +5036,13 @@ void PIN_MANAGER_Initialize(void)
 
 
 
-    ANSELA = 0x37;
+    ANSELA = 0x31;
     ANSELB = 0x16;
 
 
 
 
-    WPUB = 0x10;
+    WPUB = 0x16;
     WPUE = 0x8;
     OPTION_REGbits.nWPUEN = 0x0;
 # 92 "mcc_generated_files/system/src/pins.c"

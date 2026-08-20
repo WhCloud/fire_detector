@@ -5012,7 +5012,7 @@ void CLOCK_Initialize(void);
 # 40 "mcc_generated_files/system/src/../../system/config_bits.h" 2
 # 43 "mcc_generated_files/system/src/../../system/system.h" 2
 # 1 "mcc_generated_files/system/src/../../system/../system/pins.h" 1
-# 344 "mcc_generated_files/system/src/../../system/../system/pins.h"
+# 306 "mcc_generated_files/system/src/../../system/../system/pins.h"
 void PIN_MANAGER_Initialize (void);
 
 
@@ -5030,11 +5030,11 @@ void PIN_MANAGER_IOC(void);
 
 
 void DATA_IN_ISR(void);
-# 370 "mcc_generated_files/system/src/../../system/../system/pins.h"
+# 332 "mcc_generated_files/system/src/../../system/../system/pins.h"
 void DATA_IN_SetInterruptHandler(void (* InterruptHandler)(void));
-# 381 "mcc_generated_files/system/src/../../system/../system/pins.h"
+# 343 "mcc_generated_files/system/src/../../system/../system/pins.h"
 extern void (*DATA_IN_InterruptHandler)(void);
-# 392 "mcc_generated_files/system/src/../../system/../system/pins.h"
+# 354 "mcc_generated_files/system/src/../../system/../system/pins.h"
 void DATA_IN_DefaultInterruptHandler(void);
 # 44 "mcc_generated_files/system/src/../../system/system.h" 2
 
@@ -5050,11 +5050,7 @@ typedef enum
     ADC_CHANNEL_TEMP = 0x1d,
     ADC_CHANNEL_DAC = 0x1e,
     ADC_CHANNEL_FVR = 0x1f,
-    ADC_CHANNEL_ANA0 = 0,
-    ADC_CHANNEL_ANA1 = 1,
-    ADC_CHANNEL_ANA2 = 2,
-    ADC_CHANNEL_ANB1 = 3,
-    ADC_CHANNEL_ANB2 = 4,
+    ADC_CHANNEL_ANA0 = 0x0,
     ADC_CHANNEL_AN0 = 0x0
 } adc_channel_t;
 
@@ -5068,7 +5064,7 @@ typedef enum
     ADC_TRIGGER_SOURCE_DISABLED = 0x0
 } adc_trigger_source_t ;
 # 42 "mcc_generated_files/system/src/../../system/../adc/adc.h" 2
-# 89 "mcc_generated_files/system/src/../../system/../adc/adc.h"
+# 65 "mcc_generated_files/system/src/../../system/../adc/adc.h"
 void ADC_Initialize(void);
 
 
@@ -5102,9 +5098,9 @@ void ADC_Disable(void);
 
 
 void ADC_ChannelSelect(adc_channel_t channel);
-# 131 "mcc_generated_files/system/src/../../system/../adc/adc.h"
+# 107 "mcc_generated_files/system/src/../../system/../adc/adc.h"
 void ADC_ConversionStart(void);
-# 141 "mcc_generated_files/system/src/../../system/../adc/adc.h"
+# 117 "mcc_generated_files/system/src/../../system/../adc/adc.h"
 _Bool ADC_IsConversionDone(void);
 
 
@@ -5114,7 +5110,7 @@ _Bool ADC_IsConversionDone(void);
 
 
 void ADC_ConversionStop(void);
-# 158 "mcc_generated_files/system/src/../../system/../adc/adc.h"
+# 134 "mcc_generated_files/system/src/../../system/../adc/adc.h"
 adc_result_t ADC_ConversionResultGet(void);
 
 
@@ -5148,7 +5144,7 @@ uint8_t ADC_ResolutionGet(void);
 
 
 void ADC_ConversionDoneInterruptFlagClear(void);
-# 199 "mcc_generated_files/system/src/../../system/../adc/adc.h"
+# 175 "mcc_generated_files/system/src/../../system/../adc/adc.h"
 _Bool ADC_IsConversionDoneInterruptFlagSet(void);
 
 
@@ -5187,7 +5183,7 @@ void ADC_ISR(void);
 # 41 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 # 1 "mcc_generated_files/system/src/../../system/../timer/tmr1_deprecated.h" 1
 # 42 "mcc_generated_files/system/src/../../system/../timer/tmr1.h" 2
-# 191 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+# 185 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 void TMR1_Initialize(void);
 
 
@@ -5197,19 +5193,19 @@ void TMR1_Initialize(void);
 
 
 void TMR1_Deinitialize(void);
-# 208 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+# 202 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 void TMR1_Start(void);
-# 217 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+# 211 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 void TMR1_Stop(void);
-# 226 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+# 220 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 uint16_t TMR1_CounterGet(void);
-# 235 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+# 229 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 void TMR1_CounterSet(uint16_t timerVal);
-# 244 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+# 238 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 void TMR1_PeriodSet(uint16_t periodVal);
-# 253 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+# 247 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 uint16_t TMR1_PeriodGet(void);
-# 262 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+# 256 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 void TMR1_Reload(void);
 
 
@@ -5219,10 +5215,12 @@ void TMR1_Reload(void);
 
 
 uint16_t TMR1_MaxCountGet(void);
-# 279 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+# 273 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 void TMR1_SinglePulseAcquisitionStart(void);
-# 288 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+# 282 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 uint8_t TMR1_GateStateGet(void);
+# 291 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+_Bool TMR1_OverflowStatusGet(void);
 
 
 
@@ -5230,24 +5228,8 @@ uint8_t TMR1_GateStateGet(void);
 
 
 
-void TMR1_OverflowInterruptEnable(void);
-
-
-
-
-
-
-
-void TMR1_OverflowInterruptDisable(void);
-
-
-
-
-
-
-
-void TMR1_OverflowISR(void);
-# 321 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
+void TMR1_OverflowStatusClear(void);
+# 308 "mcc_generated_files/system/src/../../system/../timer/tmr1.h"
 _Bool TMR1_GateEventStatusGet(void);
 
 
@@ -5311,13 +5293,16 @@ void INTERRUPT_Initialize (void)
 void __attribute__((picinterrupt(("")))) INTERRUPT_InterruptManager (void)
 {
 
+    if(INTCONbits.IOCIF == 1)
+    {
+        PIN_MANAGER_IOC();
+        INTCONbits.IOCIF = 0;
+    }
+
+
     if(INTCONbits.PEIE == 1)
     {
-        if(PIE1bits.TMR1IE == 1 && PIR1bits.TMR1IF == 1)
-        {
-            TMR1_OverflowISR();
-        }
-        else if(PIE1bits.ADIE == 1 && PIR1bits.ADIF == 1)
+        if(PIE1bits.ADIE == 1 && PIR1bits.ADIF == 1)
         {
             ADC_ISR();
         }
@@ -5330,10 +5315,6 @@ void __attribute__((picinterrupt(("")))) INTERRUPT_InterruptManager (void)
     {
 
     }
-if (INTCONbits.IOCIF) {
-    PIN_MANAGER_IOC();
-    INTCONbits.IOCIF = 0;
-}
 }
 
 void INT_ISR(void)

@@ -4998,11 +4998,7 @@ typedef enum
     ADC_CHANNEL_TEMP = 0x1d,
     ADC_CHANNEL_DAC = 0x1e,
     ADC_CHANNEL_FVR = 0x1f,
-    ADC_CHANNEL_ANA0 = 0,
-    ADC_CHANNEL_ANA1 = 1,
-    ADC_CHANNEL_ANA2 = 2,
-    ADC_CHANNEL_ANB1 = 3,
-    ADC_CHANNEL_ANB2 = 4,
+    ADC_CHANNEL_ANA0 = 0x0,
     ADC_CHANNEL_AN0 = 0x0
 } adc_channel_t;
 
@@ -5016,7 +5012,7 @@ typedef enum
     ADC_TRIGGER_SOURCE_DISABLED = 0x0
 } adc_trigger_source_t ;
 # 42 "mcc_generated_files/adc/src/../adc.h" 2
-# 89 "mcc_generated_files/adc/src/../adc.h"
+# 65 "mcc_generated_files/adc/src/../adc.h"
 void ADC_Initialize(void);
 
 
@@ -5050,9 +5046,9 @@ void ADC_Disable(void);
 
 
 void ADC_ChannelSelect(adc_channel_t channel);
-# 131 "mcc_generated_files/adc/src/../adc.h"
+# 107 "mcc_generated_files/adc/src/../adc.h"
 void ADC_ConversionStart(void);
-# 141 "mcc_generated_files/adc/src/../adc.h"
+# 117 "mcc_generated_files/adc/src/../adc.h"
 _Bool ADC_IsConversionDone(void);
 
 
@@ -5062,7 +5058,7 @@ _Bool ADC_IsConversionDone(void);
 
 
 void ADC_ConversionStop(void);
-# 158 "mcc_generated_files/adc/src/../adc.h"
+# 134 "mcc_generated_files/adc/src/../adc.h"
 adc_result_t ADC_ConversionResultGet(void);
 
 
@@ -5096,7 +5092,7 @@ uint8_t ADC_ResolutionGet(void);
 
 
 void ADC_ConversionDoneInterruptFlagClear(void);
-# 199 "mcc_generated_files/adc/src/../adc.h"
+# 175 "mcc_generated_files/adc/src/../adc.h"
 _Bool ADC_IsConversionDoneInterruptFlagSet(void);
 
 

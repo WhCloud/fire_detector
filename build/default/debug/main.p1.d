@@ -8,5 +8,4 @@ mcc_generated_files/system/../system/interrupt.h  \
 mcc_generated_files/system/../adc/adc.h  \
 mcc_generated_files/system/../adc/./adc_types.h  \
 mcc_generated_files/system/../timer/tmr1.h  \
-mcc_generated_files/system/../timer/tmr1_deprecated.h  \
-mcc_generated_files/timer/tmr1.h 
+mcc_generated_files/system/../timer/tmr1_deprecated.h 

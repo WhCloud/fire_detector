@@ -4992,7 +4992,7 @@ extern __bank0 __bit __timeout;
 
 # 1 "mcc_generated_files/timer/src/../tmr1_deprecated.h" 1
 # 42 "mcc_generated_files/timer/src/../tmr1.h" 2
-# 191 "mcc_generated_files/timer/src/../tmr1.h"
+# 185 "mcc_generated_files/timer/src/../tmr1.h"
 void TMR1_Initialize(void);
 
 
@@ -5002,19 +5002,19 @@ void TMR1_Initialize(void);
 
 
 void TMR1_Deinitialize(void);
-# 208 "mcc_generated_files/timer/src/../tmr1.h"
+# 202 "mcc_generated_files/timer/src/../tmr1.h"
 void TMR1_Start(void);
-# 217 "mcc_generated_files/timer/src/../tmr1.h"
+# 211 "mcc_generated_files/timer/src/../tmr1.h"
 void TMR1_Stop(void);
-# 226 "mcc_generated_files/timer/src/../tmr1.h"
+# 220 "mcc_generated_files/timer/src/../tmr1.h"
 uint16_t TMR1_CounterGet(void);
-# 235 "mcc_generated_files/timer/src/../tmr1.h"
+# 229 "mcc_generated_files/timer/src/../tmr1.h"
 void TMR1_CounterSet(uint16_t timerVal);
-# 244 "mcc_generated_files/timer/src/../tmr1.h"
+# 238 "mcc_generated_files/timer/src/../tmr1.h"
 void TMR1_PeriodSet(uint16_t periodVal);
-# 253 "mcc_generated_files/timer/src/../tmr1.h"
+# 247 "mcc_generated_files/timer/src/../tmr1.h"
 uint16_t TMR1_PeriodGet(void);
-# 262 "mcc_generated_files/timer/src/../tmr1.h"
+# 256 "mcc_generated_files/timer/src/../tmr1.h"
 void TMR1_Reload(void);
 
 
@@ -5024,10 +5024,12 @@ void TMR1_Reload(void);
 
 
 uint16_t TMR1_MaxCountGet(void);
-# 279 "mcc_generated_files/timer/src/../tmr1.h"
+# 273 "mcc_generated_files/timer/src/../tmr1.h"
 void TMR1_SinglePulseAcquisitionStart(void);
-# 288 "mcc_generated_files/timer/src/../tmr1.h"
+# 282 "mcc_generated_files/timer/src/../tmr1.h"
 uint8_t TMR1_GateStateGet(void);
+# 291 "mcc_generated_files/timer/src/../tmr1.h"
+_Bool TMR1_OverflowStatusGet(void);
 
 
 
@@ -5035,24 +5037,8 @@ uint8_t TMR1_GateStateGet(void);
 
 
 
-void TMR1_OverflowInterruptEnable(void);
-
-
-
-
-
-
-
-void TMR1_OverflowInterruptDisable(void);
-
-
-
-
-
-
-
-void TMR1_OverflowISR(void);
-# 321 "mcc_generated_files/timer/src/../tmr1.h"
+void TMR1_OverflowStatusClear(void);
+# 308 "mcc_generated_files/timer/src/../tmr1.h"
 _Bool TMR1_GateEventStatusGet(void);
 
 
@@ -5103,8 +5089,8 @@ void TMR1_Initialize(void)
 {
     T1CONbits.TMR1ON = 0U;
 
-    TMR1H = 0xFF;
-    TMR1L = 0xFF;
+    TMR1H = 0x0;
+    TMR1L = 0x0;
 
     timer1ReloadVal=((uint16_t)TMR1H << 8U) | TMR1L;
 
@@ -5117,8 +5103,9 @@ void TMR1_Initialize(void)
     TMR1_OverflowCallback =TMR1_DefaultOverflowCallback;
     TMR1_GateCallback = TMR1_DefaultGateCallback;
 
+
  PIR1bits.TMR1IF = 0U;
- PIE1bits.TMR1IE = 1U;
+ PIR1bits.TMR1GIF = 0U;
 
     T1CON = (1 << 0x0)
         | (1 << 0x2)
@@ -5217,6 +5204,16 @@ uint8_t TMR1_GateStateGet(void)
     return (T1GCONbits.T1GVAL);
 }
 
+_Bool TMR1_OverflowStatusGet(void)
+{
+    return(PIR1bits.TMR1IF);
+}
+
+void TMR1_OverflowStatusClear(void)
+{
+    PIR1bits.TMR1IF = 0U;
+}
+
 _Bool TMR1_GateEventStatusGet(void)
 {
     return(PIR1bits.TMR1GIF);
@@ -5229,6 +5226,16 @@ void TMR1_GateEventStatusClear(void)
 
 void TMR1_Tasks(void)
 {
+    if(1U == PIR1bits.TMR1IF)
+    {
+
+        TMR1_CounterSet(timer1ReloadVal);
+        if(((void*)0) != TMR1_OverflowCallback)
+        {
+            TMR1_OverflowCallback();
+        }
+        PIR1bits.TMR1IF = 0;
+    }
     if(1U == PIR1bits.TMR1GIF)
     {
          if(((void*)0) != TMR1_GateCallback)
@@ -5239,28 +5246,6 @@ void TMR1_Tasks(void)
     }
 }
 
-void TMR1_OverflowInterruptEnable(void)
-{
-    PIE1bits.TMR1IE = 1U;
-}
-
-void TMR1_OverflowInterruptDisable(void)
-{
-    PIE1bits.TMR1IE = 0U;
-}
-
-void TMR1_OverflowISR(void)
-{
-
-    TMR1_CounterSet(timer1ReloadVal);
-
-    if(((void*)0) != TMR1_OverflowCallback)
-    {
-  TMR1_OverflowCallback();
-    }
-
- PIR1bits.TMR1IF = 0U;
-}
 
 void TMR1_OverflowCallbackRegister(void (* CallbackHandler)(void))
 {

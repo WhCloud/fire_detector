@@ -1,5 +1,5 @@
 Version 4.0 HI-TECH Software Intermediate Code
-[v F2831 `(v ~T0 @X0 0 tf ]
+[v F2827 `(v ~T0 @X0 0 tf ]
 "2030 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 2030:     struct {
 [s S107 :1 `uc 1 :1 `uc 1 :5 `uc 1 ]
@@ -35,7 +35,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 "1984
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 1984: extern volatile unsigned char ADRESL __attribute__((address(0x09B)));
 [v _ADRESL `Vuc ~T0 @X0 0 e@155 ]
-[v F2833 `(v ~T0 @X0 0 tf ]
+[v F2829 `(v ~T0 @X0 0 tf ]
 "640
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 640:     struct {
 [s S42 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -60,19 +60,19 @@ Version 4.0 HI-TECH Software Intermediate Code
 [v _PIE1bits `VS80 ~T0 @X0 0 e@145 ]
 "87 mcc_generated_files/adc/src/adc.c
 [; ;mcc_generated_files/adc/src/adc.c: 87: void ADC_ChannelSelect(adc_channel_t channel)
-[c E2791 29 30 31 0 1 2 3 4 0 .. ]
-[n E2791 . ADC_CHANNEL_TEMP ADC_CHANNEL_DAC ADC_CHANNEL_FVR ADC_CHANNEL_ANA0 ADC_CHANNEL_ANA1 ADC_CHANNEL_ANA2 ADC_CHANNEL_ANB1 ADC_CHANNEL_ANB2 ADC_CHANNEL_AN0  ]
+[c E2791 29 30 31 0 0 .. ]
+[n E2791 . ADC_CHANNEL_TEMP ADC_CHANNEL_DAC ADC_CHANNEL_FVR ADC_CHANNEL_ANA0 ADC_CHANNEL_AN0  ]
 [v F202 `(v ~T0 @X0 1 tf1`ul ]
 "20 C:\Program Files\Microchip\xc8\v3.10\pic\include/builtins.h
 [v __delay `JF202 ~T0 @X0 0 e ]
 [p i __delay ]
 "124 mcc_generated_files/adc/src/adc.c
 [; ;mcc_generated_files/adc/src/adc.c: 124: void ADC_AutoTriggerSourceSet(adc_trigger_source_t triggerSource)
-[c E2802 0 .. ]
-[n E2802 . ADC_TRIGGER_SOURCE_DISABLED  ]
-[v F2852 `(v ~T0 @X0 0 tf ]
-[v F2854 `(v ~T0 @X0 0 tf ]
-[v F2859 `(v ~T0 @X0 0 tf ]
+[c E2798 0 .. ]
+[n E2798 . ADC_TRIGGER_SOURCE_DISABLED  ]
+[v F2848 `(v ~T0 @X0 0 tf ]
+[v F2850 `(v ~T0 @X0 0 tf ]
+[v F2855 `(v ~T0 @X0 0 tf ]
 "52 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 52: __asm("INDF0 equ 00h");
 [; <" INDF0 equ 00h ;# ">
@@ -570,7 +570,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; <" TOSH equ 0FEFh ;# ">
 "45 mcc_generated_files/adc/src/adc.c
 [; ;mcc_generated_files/adc/src/adc.c: 45: static void (*ADC_ConversionDoneCallback)(void);
-[v _ADC_ConversionDoneCallback `*F2831 ~T0 @X0 1 s ]
+[v _ADC_ConversionDoneCallback `*F2827 ~T0 @X0 1 s ]
 "47
 [; ;mcc_generated_files/adc/src/adc.c: 47: void ADC_Initialize(void)
 [v _ADC_Initialize `(v ~T0 @X0 1 ef ]
@@ -596,7 +596,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e = _ADRESL -> << -> 0 `i -> 0 `i `uc ]
 "59
 [; ;mcc_generated_files/adc/src/adc.c: 59:     ADC_ConversionDoneCallback = ((void*)0);
-[e = _ADC_ConversionDoneCallback -> -> -> 0 `i `*v `*F2833 ]
+[e = _ADC_ConversionDoneCallback -> -> -> 0 `i `*v `*F2829 ]
 "60
 [; ;mcc_generated_files/adc/src/adc.c: 60:     PIR1bits.ADIF = 0U;
 [e = . . _PIR1bits 0 6 -> -> 0 `ui `uc ]
@@ -799,14 +799,14 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 "124
 [; ;mcc_generated_files/adc/src/adc.c: 124: void ADC_AutoTriggerSourceSet(adc_trigger_source_t triggerSource)
-[v _ADC_AutoTriggerSourceSet `(v ~T0 @X0 1 ef1`E2802 ]
+[v _ADC_AutoTriggerSourceSet `(v ~T0 @X0 1 ef1`E2798 ]
 "125
 [; ;mcc_generated_files/adc/src/adc.c: 125: {
 {
 [e :U _ADC_AutoTriggerSourceSet ]
 "124
 [; ;mcc_generated_files/adc/src/adc.c: 124: void ADC_AutoTriggerSourceSet(adc_trigger_source_t triggerSource)
-[v _triggerSource `E2802 ~T0 @X0 1 r1 ]
+[v _triggerSource `E2798 ~T0 @X0 1 r1 ]
 "125
 [; ;mcc_generated_files/adc/src/adc.c: 125: {
 [f ]
@@ -863,14 +863,14 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 "143
 [; ;mcc_generated_files/adc/src/adc.c: 143: void ADC_ConversionDoneCallbackRegister(void (*callback)(void))
-[v _ADC_ConversionDoneCallbackRegister `(v ~T0 @X0 1 ef1`*F2852 ]
+[v _ADC_ConversionDoneCallbackRegister `(v ~T0 @X0 1 ef1`*F2848 ]
 "144
 [; ;mcc_generated_files/adc/src/adc.c: 144: {
 {
 [e :U _ADC_ConversionDoneCallbackRegister ]
 "143
 [; ;mcc_generated_files/adc/src/adc.c: 143: void ADC_ConversionDoneCallbackRegister(void (*callback)(void))
-[v _callback `*F2854 ~T0 @X0 1 r1 ]
+[v _callback `*F2850 ~T0 @X0 1 r1 ]
 "144
 [; ;mcc_generated_files/adc/src/adc.c: 144: {
 [f ]
@@ -924,7 +924,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e = . . _PIR1bits 0 6 -> -> 0 `ui `uc ]
 "162
 [; ;mcc_generated_files/adc/src/adc.c: 162:     if (((void*)0) != ADC_ConversionDoneCallback)
-[e $ ! != -> -> -> 0 `i `*v `*F2859 _ADC_ConversionDoneCallback 389  ]
+[e $ ! != -> -> -> 0 `i `*v `*F2855 _ADC_ConversionDoneCallback 389  ]
 "163
 [; ;mcc_generated_files/adc/src/adc.c: 163:     {
 {

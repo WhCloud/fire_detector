@@ -7,7 +7,7 @@
 # 1 "C:\\Program Files\\Microchip\\xc8\\v3.10\\pic\\include/language_support.h" 1 3
 # 2 "<built-in>" 2
 # 1 "main.c" 2
-# 38 "main.c"
+# 40 "main.c"
 # 1 "./mcc_generated_files/system/system.h" 1
 # 39 "./mcc_generated_files/system/system.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v3.10\\pic\\include/xc.h" 1 3
@@ -5272,8 +5272,8 @@ void TMR1_Tasks(void);
 
 
 void SYSTEM_Initialize(void);
-# 39 "main.c" 2
-# 87 "main.c"
+# 41 "main.c" 2
+# 99 "main.c"
 volatile uint8_t bit_count = 12;
 volatile uint32_t rx_buffer = 0;
 volatile uint16_t prev_ticks = 0;
@@ -5380,7 +5380,7 @@ void protocol_on_bus_change(void) {
         }
     }
 }
-# 207 "main.c"
+# 219 "main.c"
 void send_pulse(uint16_t us) {
     if (us > 0) {
         uint16_t ticks = ((uint16_t)((uint32_t)(us) / 2u));
@@ -5405,10 +5405,13 @@ void send_type_bits(uint8_t type) {
     }
 }
 
-uint16_t read_adc_rb1(void) {
+
+
+
+uint16_t read_adc_ch(uint8_t chs) {
     ADCON1 = 0xA0;
     ADCON0 = 0x01;
-    ADCON0bits.CHS = 0;
+    ADCON0bits.CHS = chs;
     _delay((unsigned long)((10)*(16000000/4000000.0)));
     ADCON0bits.GO = 1;
     while (ADCON0bits.GO);
@@ -5417,10 +5420,19 @@ uint16_t read_adc_rb1(void) {
 
 
 
+
+uint16_t read_adc_max(void) {
+    uint16_t v_main = read_adc_ch(0u);
+    uint16_t v_pin22 = read_adc_ch(10u);
+    return (v_pin22 > v_main) ? v_pin22 : v_main;
+}
+
+
+
 void send_response_phase(uint8_t phase) {
     switch (phase) {
         case 0: send_pulse(resp_pull_us); break;
-        case 1: send_type_bits(0x04); break;
+        case 1: send_type_bits(0x06); break;
         case 2: send_pulse(resp_pull_us); break;
         default: break;
     }
@@ -5455,11 +5467,28 @@ static uint16_t convert_adc_to_pulse_usec(uint16_t adc_val) {
 static void apply_mode_select(void) {
     uint8_t sel = (uint8_t)((PORTBbits.RB3 << 1) | PORTBbits.RB5);
     switch (sel) {
-        case 0: break;
-        case 1: break;
-        case 2: break;
-        case 3: break;
-        default: break;
+        case 0: {
+                do { LATCbits.LATC7 = 1; } while(0);
+                do { LATCbits.LATC5 = 1; } while(0);
+            }
+            break;
+        case 1: {
+                do { LATCbits.LATC7 = 1; } while(0);
+                do { LATCbits.LATC5 = 1; } while(0);
+            }
+            break;
+        case 2: {
+                do { LATCbits.LATC7 = 1; } while(0);
+                do { LATCbits.LATC5 = 1; } while(0);
+            }
+            break;
+        case 3: {
+                do { LATCbits.LATC7 = 1; } while(0);
+                do { LATCbits.LATC5 = 1; } while(0);
+            }
+            break;
+        default:
+            break;
     }
 }
 
@@ -5522,12 +5551,13 @@ void process_command(void) {
 
             if ((PORTAbits.RA1 == 0) || (PORTAbits.RA2 == 0)) {
                 resp_pull_us = 0;
-                do { LATCbits.LATC4 = 1; } while(0);
+                do { LATCbits.LATC5 = 1; } while(0);
             } else {
-                resp_pull_us = convert_adc_to_pulse_usec(read_adc_rb1());
-                do { LATCbits.LATC4 = 0; } while(0);
-            }
 
+
+                resp_pull_us = convert_adc_to_pulse_usec(read_adc_max());
+                do { LATCbits.LATC5 = 0; } while(0);
+            }
             reset_counter = 0;
             activate_counter = 0;
             break;
@@ -5541,8 +5571,7 @@ void process_command(void) {
             reset_counter = 0;
             if (++activate_counter >= 4) {
                 activate_counter = 0;
-                do { LATCbits.LATC7 = 1; } while(0);
-                do { LATCbits.LATC6 = 1; } while(0);
+                apply_mode_select();
             }
             break;
 
@@ -5552,7 +5581,7 @@ void process_command(void) {
             reset_counter = 0;
             activate_counter = 0;
 
-            do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((60)*(16000000/4000.0))); do { LATCbits.LATC5 = 0; } while(0);
+            do { LATCbits.LATC4 = 1; } while(0); _delay((unsigned long)((60)*(16000000/4000.0))); do { LATCbits.LATC4 = 0; } while(0);
             break;
 
         default:
@@ -5582,9 +5611,21 @@ void main(void) {
     ANSELAbits.ANSA2 = 0;
 
 
+
+
+
+    ANSELBbits.ANSB1 = 1;
+    ANSELBbits.ANSB2 = 1;
+    TRISBbits.TRISB1 = 1;
+    TRISBbits.TRISB2 = 1;
+    WPUBbits.WPUB1 = 0;
+    WPUBbits.WPUB2 = 0;
+
+
     for (uint8_t i = 0; i < 3; i++) {
-        do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((150)*(16000000/4000.0)));
-        do { LATCbits.LATC5 = 0; } while(0); _delay((unsigned long)((150)*(16000000/4000.0)));
+        do { LATCbits.LATC4 = 1; } while(0);
+
+
     }
 
 
@@ -5611,7 +5652,7 @@ void main(void) {
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
 
-    do { LATCbits.LATC5 = 1; } while(0); _delay((unsigned long)((100)*(16000000/4000.0))); do { LATCbits.LATC5 = 0; } while(0);
+
 
     uint16_t idle_loops = 0;
 
@@ -5644,11 +5685,11 @@ void main(void) {
                 in_response = 0;
                 resp_armed = 0;
                 resp_phase = 0;
+                do { LATCbits.LATC4 = 1; } while(0); _delay((unsigned long)((20)*(16000000/4000.0))); do { LATCbits.LATC4 = 0; } while(0);
             }
         }
 
         if (!in_response) {
-            apply_mode_select();
             _delay((unsigned long)((100)*(16000000/4000000.0)));
         }
     }

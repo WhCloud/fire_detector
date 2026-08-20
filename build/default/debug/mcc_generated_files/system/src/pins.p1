@@ -61,11 +61,11 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 5922: extern volatile unsigned char IOCBF __attribute__((address(0x396)));
 [v _IOCBF `Vuc ~T0 @X0 0 e@918 ]
 [v F2794 `(v ~T0 @X0 0 tf ]
-"370 mcc_generated_files/system/src/../pins.h
-[; ;mcc_generated_files/system/src/../pins.h: 370: void DATA_IN_SetInterruptHandler(void (* InterruptHandler)(void));
+"332 mcc_generated_files/system/src/../pins.h
+[; ;mcc_generated_files/system/src/../pins.h: 332: void DATA_IN_SetInterruptHandler(void (* InterruptHandler)(void));
 [v _DATA_IN_SetInterruptHandler `(v ~T0 @X0 0 ef1`*F2794 ]
-"392
-[; ;mcc_generated_files/system/src/../pins.h: 392: void DATA_IN_DefaultInterruptHandler(void);
+"354
+[; ;mcc_generated_files/system/src/../pins.h: 354: void DATA_IN_DefaultInterruptHandler(void);
 [v _DATA_IN_DefaultInterruptHandler `(v ~T0 @X0 0 ef ]
 "355 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 355:     struct {
@@ -97,12 +97,12 @@ Version 4.0 HI-TECH Software Intermediate Code
 "5942
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 5942: extern volatile IOCBFbits_t IOCBFbits __attribute__((address(0x396)));
 [v _IOCBFbits `VS295 ~T0 @X0 0 e@918 ]
-"360 mcc_generated_files/system/src/../pins.h
-[; ;mcc_generated_files/system/src/../pins.h: 360: void DATA_IN_ISR(void);
+"322 mcc_generated_files/system/src/../pins.h
+[; ;mcc_generated_files/system/src/../pins.h: 322: void DATA_IN_ISR(void);
 [v _DATA_IN_ISR `(v ~T0 @X0 0 ef ]
-[v F2807 `(v ~T0 @X0 0 tf ]
-[v F2809 `(v ~T0 @X0 0 tf ]
-[v F2811 `(v ~T0 @X0 0 tf ]
+[v F2806 `(v ~T0 @X0 0 tf ]
+[v F2808 `(v ~T0 @X0 0 tf ]
+[v F2810 `(v ~T0 @X0 0 tf ]
 "52 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h
 [; ;C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC12-16F1xxx_DFP/1.8.254/xc8\pic\include\proc/pic16f1936.h: 52: __asm("INDF0 equ 00h");
 [; <" INDF0 equ 00h ;# ">
@@ -634,14 +634,14 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;mcc_generated_files/system/src/pins.c: 55:     TRISE = 0x8;
 [e = _TRISE -> -> 8 `i `uc ]
 "60
-[; ;mcc_generated_files/system/src/pins.c: 60:     ANSELA = 0x37;
-[e = _ANSELA -> -> 55 `i `uc ]
+[; ;mcc_generated_files/system/src/pins.c: 60:     ANSELA = 0x31;
+[e = _ANSELA -> -> 49 `i `uc ]
 "61
 [; ;mcc_generated_files/system/src/pins.c: 61:     ANSELB = 0x16;
 [e = _ANSELB -> -> 22 `i `uc ]
 "66
-[; ;mcc_generated_files/system/src/pins.c: 66:     WPUB = 0x10;
-[e = _WPUB -> -> 16 `i `uc ]
+[; ;mcc_generated_files/system/src/pins.c: 66:     WPUB = 0x16;
+[e = _WPUB -> -> 22 `i `uc ]
 "67
 [; ;mcc_generated_files/system/src/pins.c: 67:     WPUE = 0x8;
 [e = _WPUE -> -> 8 `i `uc ]
@@ -700,7 +700,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [f ]
 "119
 [; ;mcc_generated_files/system/src/pins.c: 119:     if(DATA_IN_InterruptHandler)
-[e $ ! != _DATA_IN_InterruptHandler -> -> 0 `i `*F2807 372  ]
+[e $ ! != _DATA_IN_InterruptHandler -> -> 0 `i `*F2806 372  ]
 "120
 [; ;mcc_generated_files/system/src/pins.c: 120:     {
 {
@@ -720,10 +720,10 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 "129
 [; ;mcc_generated_files/system/src/pins.c: 129: void DATA_IN_SetInterruptHandler(void (* InterruptHandler)(void)){
-[v _DATA_IN_SetInterruptHandler `(v ~T0 @X0 1 ef1`*F2809 ]
+[v _DATA_IN_SetInterruptHandler `(v ~T0 @X0 1 ef1`*F2808 ]
 {
 [e :U _DATA_IN_SetInterruptHandler ]
-[v _InterruptHandler `*F2811 ~T0 @X0 1 r1 ]
+[v _InterruptHandler `*F2810 ~T0 @X0 1 r1 ]
 [f ]
 "130
 [; ;mcc_generated_files/system/src/pins.c: 130:     DATA_IN_InterruptHandler = InterruptHandler;
