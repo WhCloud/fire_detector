@@ -38,7 +38,11 @@
 
 void CLOCK_Initialize(void)
 {
-    OSCCON = (15 << _OSCCON_IRCF_POSN)   // IRCF 16MHz_HF
+    // HAND EDIT (MCC will revert on regenerate): 16MHz -> 8MHz to halve IDD.
+    // main.c defines _XTAL_FREQ 8000000 and re-asserts this same OSCCON value
+    // right after SYSTEM_Initialize(), so a regenerate cannot silently leave the
+    // core at 16MHz while every protocol timing constant assumes 8MHz.
+    OSCCON = (14 << _OSCCON_IRCF_POSN)   // IRCF 8MHz_HF
         | (0 << _OSCCON_SCS_POSN)   // SCS FOSC
         | (0 << _OSCCON_SPLLEN_POSN);  // SPLLEN disabled
     BORCON = (0 << _BORCON_SBOREN_POSN);  // SBOREN disabled

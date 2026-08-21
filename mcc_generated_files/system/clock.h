@@ -37,8 +37,12 @@
 #ifndef CLOCK_H
 #define	CLOCK_H
 
+// HAND EDIT (MCC will revert on regenerate): 16MHz -> 8MHz, must match the
+// _XTAL_FREQ that main.c defines before including this header. main.c wins for
+// its own translation unit; this fallback is what every other generated .c sees
+// (e.g. adc.c uses __delay_us for its acquisition delay).
 #ifndef _XTAL_FREQ
-#define _XTAL_FREQ 16000000
+#define _XTAL_FREQ 8000000
 #endif
 
 /**
