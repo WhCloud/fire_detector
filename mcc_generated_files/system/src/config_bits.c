@@ -44,8 +44,13 @@
 #pragma config CPD = OFF    // Data Memory Code Protection->Data memory code protection is disabled
 #pragma config BOREN = ON    // Brown-out Reset Enable->Brown-out Reset enabled
 #pragma config CLKOUTEN = OFF    // Clock Out Enable->CLKOUT function is disabled. I/O or oscillator function on the CLKOUT pin
-#pragma config IESO = ON    // Internal/External Switchover->Internal/External Switchover mode is enabled
-#pragma config FCMEN = ON    // Fail-Safe Clock Monitor Enable->Fail-Safe Clock Monitor is enabled
+// HAND EDIT (MCC will revert on regenerate -- these values are device defaults,
+// they are NOT stored in new_pic.mc3): IESO and FCMEN are both meaningless with
+// FOSC = INTOSC -- there is no external oscillator to switch over to or to
+// monitor -- while FCMEN keeps the LFINTOSC running permanently as its sample
+// clock. Turning both off costs nothing and saves that idle current.
+#pragma config IESO = OFF    // Internal/External Switchover->Internal/External Switchover mode is disabled
+#pragma config FCMEN = OFF    // Fail-Safe Clock Monitor Enable->Fail-Safe Clock Monitor is disabled
 
 //CONFIG2
 #pragma config WRT = OFF    // Flash Memory Self-Write Protection->Write protection off
